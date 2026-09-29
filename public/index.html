@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mal und Geteilt lernen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAFCFF; --grid:#DCE7F6; --rand:#E9A3A3;
+  --ink:#1B3A8C; --ink-soft:#E3EAFA; --on-ink:#FFFFFF;
+  --text:#1E2533; --muted:#556072;
+  --ok:#1F8A55; --ok-soft:#DDF3E6; --bad:#D33A2C; --bad-soft:#FBDDD8;
+  --marker:#FFE36E;
+  --sans:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --hand:"Patrick Hand","Segoe Print","Comic Sans MS","Chalkboard SE",cursive;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131A29; --grid:#1E2940; --rand:#7C3D47;
+    --ink:#A9C1FF; --ink-soft:#243150; --on-ink:#0F1626;
+    --text:#E8EDF6; --muted:#A1ACC1;
+    --ok:#56CC92; --ok-soft:#163627; --bad:#FF7466; --bad-soft:#47201C;
+    --marker:#6E5A12;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131A29; --grid:#1E2940; --rand:#7C3D47;
+  --ink:#A9C1FF; --ink-soft:#243150; --on-ink:#0F1626;
+  --text:#E8EDF6; --muted:#A1ACC1;
+  --ok:#56CC92; --ok-soft:#163627; --bad:#FF7466; --bad-soft:#47201C;
+  --marker:#6E5A12;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--paper)}
+body{
+  margin:0;min-height:100vh;
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--text);
+  font-family:var(--sans);font-size:1.125rem;line-height:1.55;
+}
+.top,.sheet{max-width:700px;margin:0 auto;padding-left:44px;padding-right:20px;position:relative}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:16px;padding-bottom:8px;flex-wrap:wrap}
+.brand{font:700 1.15rem var(--sans);color:var(--ink);background:none;border:0;padding:6px 0;cursor:pointer}
+.top nav{display:flex;gap:4px}
+.navbtn{font:700 1rem var(--sans);color:var(--ink);background:none;border:2px solid transparent;border-radius:10px;padding:6px 14px;cursor:pointer;min-height:44px}
+.navbtn[aria-current="page"]{border-color:var(--ink)}
+.sheet{padding-bottom:80px;min-height:calc(100vh - 80px)}
+.sheet::before{content:"";position:absolute;left:24px;top:0;bottom:0;width:2px;background:var(--rand)}
+.top::before{content:"";position:absolute;left:24px;top:0;bottom:0;width:2px;background:var(--rand)}
+
+h1{font-size:clamp(2rem,6vw,2.8rem);line-height:1.12;color:var(--ink);margin:24px 0 12px;letter-spacing:-.01em}
+h2{font-size:1.4rem;line-height:1.25;color:var(--ink);margin:36px 0 8px}
+h3{font-size:1.15rem;margin:0 0 6px}
+p{margin:0 0 12px;max-width:62ch}
+.lead{font-size:1.25rem}
+.muted{color:var(--muted)}
+
+.hand{font-family:var(--hand);font-size:1.55rem;line-height:1.35;color:var(--ink);margin:2px 0;white-space:pre-wrap}
+mark{background:linear-gradient(transparent 52%,var(--marker) 52%);color:inherit;padding:0 .12em}
+.result{font-size:2rem;font-weight:700;margin:4px 0}
+
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0 8px}
+.btn{font:700 1.1rem var(--sans);min-height:52px;padding:12px 24px;border-radius:12px;border:2px solid var(--ink);background:var(--ink);color:var(--on-ink);cursor:pointer}
+.btn.secondary{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+
+.viz{overflow-x:auto;padding:8px 0 12px}
+.dots{display:inline-grid;grid-template-columns:repeat(var(--cols),16px);gap:7px}
+.dot{width:16px;height:16px;border-radius:50%;background:var(--ink);display:block}
+.groups{display:flex;flex-wrap:wrap;gap:12px}
+.group{display:inline-grid;grid-template-columns:repeat(var(--cols),16px);gap:6px;padding:10px;border:2px dashed var(--ink);border-radius:14px;align-content:start}
+.caption{font-family:var(--hand);font-size:1.3rem;color:var(--muted);margin-top:6px}
+
+.tricks{list-style:none;padding:0;margin:0}
+.tricks li{padding:10px 0;border-bottom:1px solid var(--grid)}
+.tricks li:last-child{border-bottom:0}
+.tricks b{display:block}
+
+.progress{margin:24px 0 8px}
+.progress span{font-weight:700;color:var(--muted)}
+.bar{height:10px;background:var(--ink-soft);border-radius:5px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink);border-radius:5px}
+
+.steps{list-style:none;padding:0;margin:16px 0 0;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding:0 0 22px 48px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:-2px;width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);color:var(--ink);font-weight:700;display:grid;place-items:center;background:var(--paper)}
+
+.task{font-size:clamp(2.6rem,12vw,4.6rem);font-weight:700;line-height:1.1;display:flex;flex-wrap:wrap;align-items:center;gap:.25em;color:var(--text)}
+.task.small{font-size:clamp(2.2rem,9vw,3.4rem);margin:12px 0 4px}
+.answer{font:inherit;width:2.4em;text-align:center;border:0;border-bottom:5px solid var(--ink);background:transparent;color:var(--text);padding:0;border-radius:0}
+.answer:disabled{opacity:1;color:var(--text)}
+.taskbox{margin:20px 0 0;padding:22px 20px;border-radius:18px;border:2px solid var(--grid);background:var(--paper)}
+.taskbox.ok{background:var(--ok-soft);border-color:var(--ok)}
+.taskbox.wrong{animation:blink .5s ease-in-out 4}
+@keyframes blink{
+  0%,100%{background:var(--paper);border-color:var(--grid)}
+  50%{background:var(--bad-soft);border-color:var(--bad)}
+}
+@media (prefers-reduced-motion: reduce){
+  .taskbox.wrong{animation:none;background:var(--bad-soft);border-color:var(--bad)}
+}
+.msg{min-height:1.6em;margin:14px 0 0;font-weight:700}
+.msg.ok{color:var(--ok)}
+.msg.bad{color:var(--bad)}
+
+.controls{display:flex;flex-wrap:wrap;gap:18px 28px;margin:8px 0 4px}
+.ctl-label{display:block;font-weight:700;color:var(--muted);margin-bottom:6px;font-size:1rem}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:12px;overflow:hidden;background:var(--paper)}
+.seg button{font:700 1rem var(--sans);color:var(--ink);background:transparent;border:0;padding:10px 16px;min-height:46px;cursor:pointer}
+.seg button+button{border-left:2px solid var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+.stats{margin-top:28px;color:var(--muted)}
+.helpbox{margin-top:12px}
+.name-input{font:700 1.6rem var(--sans);width:100%;max-width:360px;border:0;border-bottom:4px solid var(--ink);background:transparent;color:var(--text);padding:4px 0}
+
+@media (max-width:480px){
+  .top,.sheet{padding-left:34px;padding-right:14px}
+  .sheet::before,.top::before{left:16px}
+  .btn{flex:1 1 auto}
+  .seg button{padding:10px 12px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="brand" data-go="home">Mal und Geteilt</button>
+  <nav aria-label="Bereiche">
+    <button class="navbtn" data-go="learn">Lernen</button>
+    <button class="navbtn" data-go="practice">Üben</button>
+  </nav>
+</header>
+<main class="sheet" id="app"></main>
+
+<script>
+(function(){
+  "use strict";
+  const app = document.getElementById("app");
+
+  /* ---------- Speicher (nur für diesen Browser) ---------- */
+  const store = {
+    get(k, d){ try{ const v = localStorage.getItem("mg_"+k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } },
+    set(k, v){ try{ localStorage.setItem("mg_"+k, JSON.stringify(v)); }catch(e){} }
+  };
+
+  /* ---------- Tracking-Zustand (wird vom Tracker unten gelesen) ---------- */
+  const S = window.MG_STATE = {
+    name: store.get("name", ""), view: "home", detail: "Startseite", level: "",
+    correct: 0, wrong: 0, streak: 0, learnStage: "", last: store.get("last", [])
+  };
+  function track(patch, attempt){
+    Object.assign(S, patch || {});
+    if(attempt){ S.last.push(attempt); S.last = S.last.slice(-15); store.set("last", S.last); }
+    window.dispatchEvent(new Event("mg-track"));
+  }
+  const esc = x => String(x).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const LEVEL_NAMES = {leicht:"Leicht", mittel:"Mittel", schwer:"Schwer"};
+
+  /* ---------- Hilfsfunktionen ---------- */
+  const rnd = (a,b) => a + Math.floor(Math.random()*(b-a+1));
+  const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+  const L = (...lines) => lines.map(l => `<p class="hand">${l}</p>`).join("");
+
+  function dotGrid(rows, cols){
+    return `<div class="viz"><div class="dots" style="--cols:${cols}" aria-hidden="true">${'<i class="dot"></i>'.repeat(rows*cols)}</div></div>`;
+  }
+  function groups(n, per){
+    const g = `<div class="group" style="--cols:${Math.max(1,Math.min(per,4))}">${'<i class="dot"></i>'.repeat(per)}</div>`;
+    return `<div class="viz"><div class="groups" aria-hidden="true">${g.repeat(n)}</div></div>`;
+  }
+  function stepsHTML(S){
+    return `<ol class="steps">${S.map(s => `<li><h3>${s.t}</h3>${s.h}</li>`).join("")}</ol>`;
+  }
+
+  /* ---------- Erklärungen: Mal ---------- */
+  function mulTrick(a, b){
+    const r = a*b;
+    if(b > a && a >= 2 && a <= 10 && b > 10){
+      return `<p>Du darfst die Zahlen tauschen: ${a} · ${b} ist dasselbe wie ${b} · ${a}.</p>` + mulTrick(b, a);
+    }
+    if(b < a && b >= 2 && b <= 5 && a <= 10){
+      return `<p>Du darfst die Zahlen tauschen: ${a} · ${b} ist dasselbe wie ${b} · ${a}. Das ist leichter.</p>` + mulTrick(b, a);
+    }
+    if(a === 1) return `<p>Einmal eine Zahl ist einfach die Zahl selbst.</p>` + L(`1 · ${b} = ${r}`);
+    if(b === 1) return `<p>Eine Zahl mal 1 bleibt gleich.</p>` + L(`${a} · 1 = ${r}`);
+    if(a === 10) return `<p>Mal 10 ist leicht: Häng einfach eine 0 an die ${b} dran.</p>` + L(`${b}  →  ${r}`);
+    if(b === 10) return `<p>Mal 10 ist leicht: Häng einfach eine 0 an die ${a} dran.</p>` + L(`${a}  →  ${r}`);
+    if(a === 2) return `<p>Mal 2 heißt verdoppeln.</p>` + L(`${b} + ${b} = ${r}`);
+    if(a === 3) return `<p>Erst verdoppeln, dann noch einmal die ${b} dazu.</p>` + L(`2 · ${b} = ${2*b}`, `${2*b} + ${b} = ${r}`);
+    if(a === 4) return `<p>Mal 4 heißt: verdoppeln und dann nochmal verdoppeln.</p>` + L(`${b} + ${b} = ${2*b}`, `${2*b} + ${2*b} = ${r}`);
+    if(a === 5) return `<p>Mal 5 ist die Hälfte von mal 10.</p>` + L(`10 · ${b} = ${10*b}`, `Die Hälfte von ${10*b} ist ${r}`);
+    if(a === 9) return `<p>Trick für mal 9: Rechne erst mal 10 und nimm dann einmal die ${b} weg.</p>` + L(`10 · ${b} = ${10*b}`, `${10*b} − ${b} = ${r}`);
+    if(a >= 6 && a <= 8){
+      const x = 5*b, y = (a-5)*b;
+      return `<p>Zerlege die ${a} in 5 und ${a-5}. Mal 5 ist leicht, den Rest rechnest du dazu.</p>` +
+        L(`5 · ${b} = ${x}`, `${a-5} · ${b} = ${y}`, `${x} + ${y} = ${r}`);
+    }
+    // a > 10
+    const t = Math.floor(a/10)*10, o = a % 10, x = t*b, y = o*b;
+    if(o === 0){
+      return `<p>Rechne erst ${t/10} · ${b} und häng dann eine 0 dran.</p>` + L(`${t/10} · ${b} = ${(t/10)*b}`, `→  ${r}`);
+    }
+    return `<p>Zerlege die ${a} in ${t} und ${o}. Rechne beide Teile einzeln und zähle sie dann zusammen.</p>` +
+      L(`${t} · ${b} = ${x}   (${t/10} · ${b} = ${(t/10)*b}, dann 0 dran)`, `${o} · ${b} = ${y}`, `${x} + ${y} = ${r}`);
+  }
+
+  function mulSteps(a, b){
+    const r = a*b, S = [];
+    let m = `<p><b>${a} · ${b}</b> heißt: Nimm die ${b} genau ${a}-mal.</p>`;
+    if(a >= 2 && a <= 10) m += L(`${Array(a).fill(b).join(" + ")} = ${r}`);
+    S.push({t:"Was bedeutet die Aufgabe?", h:m});
+    if(a > 1 && a <= 12 && b <= 12 && r <= 100){
+      S.push({t:"So sieht das aus", h:`<p>${a} Reihen mit je ${b} ${b === 1 ? "Punkt" : "Punkten"}:</p>${dotGrid(a,b)}`});
+    }
+    S.push({t:"Rechenweg", h:mulTrick(a,b)});
+    S.push({t:"Ergebnis", h:`<p class="result">${a} · ${b} = <mark>${r}</mark></p>`});
+    return S;
+  }
+
+  /* ---------- Erklärungen: Geteilt ---------- */
+  function divTrick(a, b){
+    const c = a/b;
+    if(b === 1) return `<p>Geteilt durch 1 bleibt die Zahl gleich.</p>` + L(`${a} : 1 = ${a}`);
+    if(b === 10) return `<p>Geteilt durch 10 ist leicht: Nimm die 0 am Ende weg.</p>` + L(`${a}  →  ${c}`);
+    if(b === 2) return `<p>Geteilt durch 2 heißt halbieren. Welche Zahl plus sich selbst ergibt ${a}?</p>` + L(`${c} + ${c} = ${a}`, `Also ist ${a} : 2 = ${c}`);
+    if(c <= 10){
+      const row = []; for(let i = 1; i <= c; i++) row.push(i*b);
+      return `<p>Denk an die Mal-Aufgabe: <b>? · ${b} = ${a}</b>. Zähle in ${b}er-Schritten, bis du bei ${a} bist, und zähl mit, wie viele Schritte es waren.</p>` +
+        L(row.join(", "), `Das sind ${c} Schritte, also ist ${a} : ${b} = ${c}`);
+    }
+    const t = Math.floor(c/10)*10, o = c % 10, X = t*b, Y = o*b;
+    if(o === 0){
+      return `<p>Rechne erst ohne die 0: ${a/10} : ${b}. Dann häng die 0 wieder dran.</p>` + L(`${a/10} : ${b} = ${c/10}`, `→  ${c}`);
+    }
+    return `<p>Zerlege die ${a} in zwei Teile, die sich leicht durch ${b} teilen lassen.</p>` +
+      L(`${a} = ${X} + ${Y}`, `${X} : ${b} = ${t}`, `${Y} : ${b} = ${o}`, `${t} + ${o} = ${c}`);
+  }
+
+  function divSteps(a, b){
+    const c = a/b, S = [];
+    S.push({t:"Was bedeutet die Aufgabe?", h:
+      `<p><b>${a} : ${b}</b> heißt: Verteile ${a} gerecht auf ${b} ${b === 1 ? "Gruppe" : "Gruppen"}. Wie viele bekommt jede Gruppe?</p>
+       <p>Oder anders gefragt: Wie oft passt die ${b} in die ${a}?</p>`});
+    if(b > 1 && b <= 10 && a <= 64){
+      S.push({t:"So sieht das aus", h:`<p>${a} Punkte, gerecht verteilt auf ${b} Gruppen:</p>${groups(b,c)}<p class="caption">Jede Gruppe hat ${c}.</p>`});
+    }
+    S.push({t:"Rechenweg", h:divTrick(a,b)});
+    S.push({t:"Probe", h:`<p>Mit der Mal-Aufgabe prüfst du, ob es stimmt:</p>` + L(`${c} · ${b} = ${a}  ✓`)});
+    S.push({t:"Ergebnis", h:`<p class="result">${a} : ${b} = <mark>${c}</mark></p>`});
+    return S;
+  }
+
+  /* ---------- Beispiele ---------- */
+  const MUL_EX = [[3,4],[2,5],[5,6],[4,7],[6,6],[7,8],[9,6],[8,9],[10,7],[12,4]];
+  const DIV_EX = [[6,2],[12,3],[20,5],[24,4],[30,6],[35,7],[48,8],[63,9],[70,10],[84,4]];
+
+  /* ---------- Zustand ---------- */
+  let view = "home";
+  let learn = store.get("learn", {stage:"intro-mul", idx:0});
+  const settings = store.get("settings", {level:"leicht", type:"mix"});
+  const stats = store.get("stats", {total:0, wrong:0});
+  if(typeof stats.wrong !== "number") stats.wrong = 0;
+  let streak = 0;
+  S.correct = stats.total; S.wrong = stats.wrong;
+  let P = null; // aktuelle Übungsaufgabe
+  let lastKey = "";
+
+  function go(v){
+    if(!S.name){ renderName(v); return; }
+    view = v;
+    document.querySelectorAll(".navbtn").forEach(b => {
+      if(b.dataset.go === v) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
+    });
+    render();
+    track({view: v});
+    window.scrollTo(0,0);
+  }
+  function stageLabel(){
+    return ({"intro-mul":"Erklärung Mal", "ex-mul":`Mal-Beispiele (${learn.idx+1}/10)`,
+             "intro-div":"Erklärung Geteilt", "ex-div":`Geteilt-Beispiele (${learn.idx+1}/10)`,
+             "done":"Lernteil abgeschlossen"})[learn.stage] || "";
+  }
+  function saveLearn(){ store.set("learn", learn); track({learnStage: stageLabel()}); }
+  S.learnStage = stageLabel();
+
+  document.addEventListener("click", e => {
+    const t = e.target.closest("[data-go]");
+    if(!t) return;
+    const target = t.dataset.go;
+    if(target === "learn" && learn.stage === "done"){ learn = {stage:"intro-mul", idx:0}; saveLearn(); }
+    if(target === "learn-restart"){ learn = {stage:"intro-mul", idx:0}; saveLearn(); go("learn"); return; }
+    go(target);
+  });
+
+  function render(){
+    if(view === "home") renderHome();
+    else if(view === "learn") renderLearn();
+    else renderPractice();
+  }
+
+  /* ---------- Namensabfrage ---------- */
+  function renderName(next){
+    app.innerHTML = `
+      <h1>Hallo! Wie heißt du?</h1>
+      <p class="lead">Gib deinen Vornamen oder einen Spitznamen ein.</p>
+      <div class="taskbox">
+        <label for="nm" class="ctl-label">Dein Name</label>
+        <input id="nm" class="name-input" maxlength="30" autocomplete="off">
+        <p class="msg bad" id="nmmsg" aria-live="polite"></p>
+      </div>
+      <div class="actions"><button class="btn" id="nmok">Los geht's</button></div>
+      <p class="muted">Gut zu wissen: Dein Name und dein Lernfortschritt werden gespeichert, also bei welcher Aufgabe du bist, was richtig und was falsch war und wann du zuletzt da warst. Das sieht nur der Ersteller dieser Seite, damit er sieht, wie gut das Lernen klappt.</p>
+    `;
+    const inp = document.getElementById("nm");
+    const ok = () => {
+      const n = inp.value.trim().replace(/\s+/g, " ").slice(0, 30);
+      if(!n){ document.getElementById("nmmsg").textContent = "Tippe zuerst deinen Namen ein."; inp.focus(); return; }
+      S.name = n; store.set("name", n);
+      go(next || "home");
+    };
+    inp.addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); ok(); } });
+    document.getElementById("nmok").onclick = ok;
+    inp.focus({preventScroll:true});
+  }
+
+  /* ---------- Startseite ---------- */
+  function renderHome(){
+    track({detail: "Startseite"});
+    const started = !(learn.stage === "intro-mul" && learn.idx === 0) && learn.stage !== "done";
+    app.innerHTML = `
+      <h1>Mal und Geteilt lernen</h1>
+      <p class="lead">Schön, dass du da bist, ${esc(S.name)}!</p>
+      <p>Hier lernst du Schritt für Schritt, wie Mal- und Geteilt-Aufgaben funktionieren.</p>
+      <p>Zuerst bekommst du eine Erklärung. Danach rechnen wir 10 Mal-Aufgaben und 10 Geteilt-Aufgaben zusammen durch, mit dem ganzen Rechenweg. Und dann kannst du selbst üben, so lange du willst.</p>
+      <div class="actions">
+        <button class="btn" data-go="learn">${started ? "Weiterlernen" : "Mit dem Lernen anfangen"}</button>
+        <button class="btn secondary" data-go="practice">Direkt üben</button>
+      </div>
+      ${started ? `<p class="muted"><button class="btn secondary" data-go="learn-restart" style="min-height:44px;padding:8px 16px;font-size:1rem">Lernen von vorne beginnen</button></p>` : ""}
+    `;
+  }
+
+  /* ---------- Lernen ---------- */
+  function renderLearn(){
+    const s = learn.stage;
+    if(s === "intro-mul") return renderIntroMul();
+    if(s === "intro-div") return renderIntroDiv();
+    if(s === "ex-mul" || s === "ex-div") return renderExample();
+    learn = {stage:"intro-mul", idx:0}; saveLearn(); renderIntroMul();
+  }
+
+  function renderIntroMul(){
+    track({detail: "Liest die Erklärung zu Mal"});
+    app.innerHTML = `
+      <h1>Mal-Rechnen</h1>
+      <p class="lead">Mal-Rechnen ist eine Abkürzung für Plus-Rechnen.</p>
+      <p>Statt 4 + 4 + 4 schreibt man kurz <b>3 · 4</b>. Das heißt: dreimal die 4. Der Punkt in der Mitte bedeutet „mal“.</p>
+      ${dotGrid(3,4)}
+      <p class="caption">3 Reihen mit je 4 Punkten sind zusammen 12 Punkte. Also ist 3 · 4 = 12.</p>
+
+      <h2>Die Reihenfolge ist egal</h2>
+      <p>3 · 4 und 4 · 3 ergeben beide 12. Das nennt man Tauschaufgabe. Du darfst dir also immer die leichtere Richtung aussuchen.</p>
+
+      <h2>Tricks, die dir helfen</h2>
+      <ul class="tricks">
+        <li><b>Mal 1: Die Zahl bleibt gleich.</b><span class="hand">1 · 7 = 7</span></li>
+        <li><b>Mal 2: Verdoppeln.</b><span class="hand">2 · 7 = 7 + 7 = 14</span></li>
+        <li><b>Mal 10: Eine 0 dranhängen.</b><span class="hand">10 · 6 = 60</span></li>
+        <li><b>Mal 5: Die Hälfte von mal 10.</b><span class="hand">5 · 8 = die Hälfte von 80 = 40</span></li>
+        <li><b>Mal 9: Erst mal 10, dann einmal abziehen.</b><span class="hand">9 · 4 = 40 − 4 = 36</span></li>
+        <li><b>Schwere Aufgaben zerlegen.</b><span class="hand">7 · 6 = 5 · 6 + 2 · 6 = 30 + 12 = 42</span></li>
+      </ul>
+
+      <p style="margin-top:24px">Als Nächstes schauen wir uns 10 Beispiele an.</p>
+      <div class="actions"><button class="btn" id="ok">Verstanden</button></div>
+    `;
+    document.getElementById("ok").onclick = () => { learn = {stage:"ex-mul", idx:0}; saveLearn(); render(); window.scrollTo(0,0); };
+  }
+
+  function renderIntroDiv(){
+    track({detail: "Liest die Erklärung zu Geteilt"});
+    app.innerHTML = `
+      <h1>Geteilt-Rechnen</h1>
+      <p class="lead">Geteilt heißt: gerecht verteilen.</p>
+      <p>Bei <b>12 : 3</b> verteilst du 12 Bonbons gerecht auf 3 Kinder. Jedes Kind bekommt 4. Die zwei Punkte bedeuten „geteilt durch“.</p>
+      ${groups(3,4)}
+      <p class="caption">12 Punkte auf 3 Gruppen verteilt: Jede Gruppe hat 4. Also ist 12 : 3 = 4.</p>
+
+      <h2>Geteilt ist Mal rückwärts</h2>
+      <p>Zu jeder Geteilt-Aufgabe gehört eine Mal-Aufgabe. Bei 12 : 3 fragst du dich: <b>Welche Zahl mal 3 ergibt 12?</b> Die Antwort ist 4, denn 4 · 3 = 12.</p>
+      <p>Wenn du das Einmaleins übst, wird Geteilt also automatisch leichter.</p>
+
+      <h2>Tricks, die dir helfen</h2>
+      <ul class="tricks">
+        <li><b>Geteilt durch 1: Die Zahl bleibt gleich.</b><span class="hand">8 : 1 = 8</span></li>
+        <li><b>Geteilt durch 2: Halbieren.</b><span class="hand">18 : 2 = 9, denn 9 + 9 = 18</span></li>
+        <li><b>Geteilt durch 10: Die 0 am Ende wegnehmen.</b><span class="hand">70 : 10 = 7</span></li>
+        <li><b>In Schritten zählen.</b><span class="hand">24 : 6  →  6, 12, 18, 24  →  4 Schritte  →  4</span></li>
+        <li><b>Große Zahlen zerlegen.</b><span class="hand">84 : 4  →  80 : 4 = 20 und 4 : 4 = 1  →  21</span></li>
+        <li><b>Probe machen: Rechne dein Ergebnis mal.</b><span class="hand">21 · 4 = 84  ✓</span></li>
+      </ul>
+
+      <p style="margin-top:24px">Jetzt kommen 10 Geteilt-Beispiele.</p>
+      <div class="actions"><button class="btn" id="ok">Verstanden</button></div>
+    `;
+    document.getElementById("ok").onclick = () => { learn = {stage:"ex-div", idx:0}; saveLearn(); render(); window.scrollTo(0,0); };
+  }
+
+  function renderExample(){
+    const isMul = learn.stage === "ex-mul";
+    const list = isMul ? MUL_EX : DIV_EX;
+    const i = learn.idx;
+    const [a,b] = list[i];
+    const last = i === list.length - 1;
+    const S = isMul ? mulSteps(a,b) : divSteps(a,b);
+    const sym = isMul ? "·" : ":";
+    let nextLabel = "Nächstes Beispiel";
+    if(last) nextLabel = isMul ? "Weiter zu Geteilt" : "Abschließen";
+    track({detail: `${isMul ? "Mal" : "Geteilt"}-Beispiel ${i+1} von ${list.length}: ${a} ${sym} ${b}`});
+
+    app.innerHTML = `
+      <div class="progress">
+        <span>${isMul ? "Mal" : "Geteilt"}-Beispiel ${i+1} von ${list.length}</span>
+        <div class="bar"><i style="width:${(i+1)/list.length*100}%"></i></div>
+      </div>
+      <div class="task small">${a} ${sym} ${b} = ?</div>
+      ${stepsHTML(S)}
+      <div class="actions">
+        ${i > 0 ? `<button class="btn secondary" id="back">Zurück</button>` : ""}
+        <button class="btn" id="next">${nextLabel}</button>
+      </div>
+    `;
+    const back = document.getElementById("back");
+    if(back) back.onclick = () => { learn.idx--; saveLearn(); render(); window.scrollTo(0,0); };
+    document.getElementById("next").onclick = () => {
+      if(!last){ learn.idx++; }
+      else if(isMul){ learn = {stage:"intro-div", idx:0}; }
+      else { learn = {stage:"done", idx:0}; saveLearn(); go("practice"); return; }
+      saveLearn(); render(); window.scrollTo(0,0);
+    };
+  }
+
+  /* ---------- Üben ---------- */
+  function makeTask(){
+    let t, key, guard = 0;
+    do{
+      const op = settings.type === "mix" ? pick(["mul","div"]) : settings.type;
+      if(op === "mul"){
+        let x, y;
+        if(settings.level === "leicht"){ x = pick([1,2,3,4,5,10]); y = rnd(1,5); }
+        else if(settings.level === "mittel"){ x = rnd(2,10); y = rnd(2,10); }
+        else { x = rnd(11,20); y = rnd(3,9); }
+        const [a,b] = Math.random() < .5 ? [x,y] : [y,x];
+        t = {op, a, b, ans:a*b};
+      } else {
+        let b, c;
+        if(settings.level === "leicht"){ b = pick([1,2,3,4,5,10]); c = rnd(1,5); }
+        else if(settings.level === "mittel"){ b = rnd(2,10); c = rnd(2,10); }
+        else { b = rnd(3,9); c = rnd(11,20); }
+        t = {op, a:b*c, b, ans:c};
+      }
+      key = t.op + t.a + "_" + t.b;
+    } while(key === lastKey && ++guard < 20);
+    lastKey = key;
+    return t;
+  }
+
+  function newTask(){
+    P = {task:makeTask(), solved:false, locked:false, tries:0};
+    renderTask();
+  }
+
+  function renderPractice(){
+    const segBtn = (group, val, label) =>
+      `<button data-${group}="${val}" aria-pressed="${settings[group] === val}">${label}</button>`;
+    app.innerHTML = `
+      <h1>Üben</h1>
+      <p>Rechne die Aufgabe und tippe dein Ergebnis ein. Wenn es richtig ist, geht es mit „Weiter“ zur nächsten Aufgabe.</p>
+      <div class="controls">
+        <div>
+          <span class="ctl-label" id="lvl-l">Schwierigkeit</span>
+          <div class="seg" role="group" aria-labelledby="lvl-l">
+            ${segBtn("level","leicht","Leicht")}${segBtn("level","mittel","Mittel")}${segBtn("level","schwer","Schwer")}
+          </div>
+        </div>
+        <div>
+          <span class="ctl-label" id="typ-l">Aufgaben</span>
+          <div class="seg" role="group" aria-labelledby="typ-l">
+            ${segBtn("type","mix","Gemischt")}${segBtn("type","mul","Mal")}${segBtn("type","div","Geteilt")}
+          </div>
+        </div>
+      </div>
+      <div id="taskarea"></div>
+      <p class="stats" id="stats"></p>
+    `;
+    app.querySelectorAll("[data-level]").forEach(b => b.onclick = () => { settings.level = b.dataset.level; store.set("settings", settings); renderPractice(); });
+    app.querySelectorAll("[data-type]").forEach(b => b.onclick = () => { settings.type = b.dataset.type; store.set("settings", settings); renderPractice(); });
+    newTask();
+  }
+
+  function updateStats(){
+    const el = document.getElementById("stats");
+    if(el) el.innerHTML = `Richtig gelöst insgesamt: <b>${stats.total}</b><br>Ohne Fehler hintereinander: <b>${streak}</b>`;
+  }
+
+  function renderTask(){
+    const t = P.task;
+    const sym = t.op === "mul" ? "·" : ":";
+    const area = document.getElementById("taskarea");
+    track({detail: `Übt: ${t.a} ${sym} ${t.b}  (${LEVEL_NAMES[settings.level]})`, level: LEVEL_NAMES[settings.level]});
+    area.innerHTML = `
+      <div class="taskbox" id="box">
+        <div class="task">
+          <span>${t.a} ${sym} ${t.b} =</span>
+          <input class="answer" id="ans" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="Dein Ergebnis für ${t.a} ${t.op === "mul" ? "mal" : "geteilt durch"} ${t.b}">
+        </div>
+        <p class="msg" id="msg" aria-live="polite"></p>
+      </div>
+      <div class="actions">
+        <button class="btn" id="check">Prüfen</button>
+        <button class="btn" id="next" disabled>Weiter</button>
+        <button class="btn secondary" id="help" hidden>Rechenweg zeigen</button>
+      </div>
+      <div class="helpbox" id="helpbox"></div>
+    `;
+    const inp = document.getElementById("ans");
+    inp.addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); check(); } });
+    inp.addEventListener("input", () => { inp.value = inp.value.replace(/[^0-9]/g, "").slice(0,4); });
+    document.getElementById("check").onclick = check;
+    document.getElementById("next").onclick = () => { if(P.solved) newTask(); };
+    document.getElementById("help").onclick = showHelp;
+    updateStats();
+    inp.focus({preventScroll:true});
+  }
+
+  function showHelp(){
+    const t = P.task;
+    const S = t.op === "mul" ? mulSteps(t.a, t.b) : divSteps(t.a, t.b);
+    const box = document.getElementById("helpbox");
+    box.innerHTML = `<h2>So rechnest du die Aufgabe</h2>${stepsHTML(S)}`;
+    document.getElementById("help").hidden = true;
+    box.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
+  }
+
+  function check(){
+    if(!P || P.solved || P.locked) return;
+    const inp = document.getElementById("ans");
+    const msg = document.getElementById("msg");
+    const box = document.getElementById("box");
+    const btnCheck = document.getElementById("check");
+    const btnNext = document.getElementById("next");
+    const v = inp.value.trim();
+    if(v === ""){ msg.className = "msg"; msg.textContent = "Tippe zuerst dein Ergebnis ein."; inp.focus(); return; }
+
+    if(Number(v) === P.task.ans){
+      P.solved = true;
+      if(P.tries === 0) streak++;
+      stats.total++; store.set("stats", stats);
+      track({correct: stats.total, streak}, {t: `${P.task.a} ${P.task.op === "mul" ? "·" : ":"} ${P.task.b}`, a: v, ok: true, at: Date.now()});
+      box.classList.add("ok");
+      msg.className = "msg ok";
+      msg.textContent = P.tries === 0 ? "Richtig! Super gemacht." : "Richtig! Gut, dass du drangeblieben bist.";
+      inp.disabled = true;
+      btnCheck.disabled = true;
+      btnNext.disabled = false;
+      btnNext.focus();
+      updateStats();
+    } else {
+      P.tries++;
+      streak = 0;
+      stats.wrong++; store.set("stats", stats);
+      track({wrong: stats.wrong, streak: 0}, {t: `${P.task.a} ${P.task.op === "mul" ? "·" : ":"} ${P.task.b}`, a: v, ok: false, at: Date.now()});
+      P.locked = true;
+      box.classList.remove("wrong"); void box.offsetWidth; box.classList.add("wrong");
+      msg.className = "msg bad";
+      msg.textContent = `${v} ist leider nicht richtig. Rechne die Aufgabe nochmal.`;
+      inp.disabled = true;
+      btnCheck.disabled = true;
+      document.getElementById("help").hidden = !!document.getElementById("helpbox").innerHTML;
+      updateStats();
+      setTimeout(() => {
+        if(!document.body.contains(box)) return;
+        box.classList.remove("wrong");
+        P.locked = false;
+        inp.disabled = false;
+        btnCheck.disabled = false;
+        inp.value = "";
+        inp.focus({preventScroll:true});
+      }, 2000);
+    }
+  }
+
+  /* ---------- Start ---------- */
+  go("home");
+})();
+</script>
+
+<!-- ============ Fortschritt an den Server (Netlify Function) schicken ============ -->
+<script>
+(function(){
+  "use strict";
+  const HEARTBEAT_MS = 10 * 60 * 1000; // alle 10 Minuten "Ich bin noch da"
+  const ENDPOINT = "/api/track";
+
+  // Eigene, zufällige Kennung pro Browser (plus Geheimnis, damit niemand fremde Einträge überschreiben kann)
+  function rand(n){ const a = new Uint8Array(n); crypto.getRandomValues(a); return Array.from(a, b => b.toString(16).padStart(2,"0")).join(""); }
+  let id, secret;
+  try{
+    id = localStorage.getItem("mg_id"); secret = localStorage.getItem("mg_secret");
+    if(!id || !secret){ id = rand(12); secret = rand(24); localStorage.setItem("mg_id", id); localStorage.setItem("mg_secret", secret); }
+  }catch(e){ id = rand(12); secret = rand(24); }
+
+  function payload(online){
+    const S = window.MG_STATE;
+    if(!S || !S.name) return null;
+    return JSON.stringify({ id, secret, data: {
+      name: S.name, view: S.view, detail: S.detail, level: S.level, learnStage: S.learnStage,
+      correct: S.correct, wrong: S.wrong, streak: S.streak, last: S.last, online: !!online
+    }});
+  }
+  function push(online){
+    const body = payload(online); if(!body) return;
+    fetch(ENDPOINT, { method: "POST", headers: {"Content-Type": "application/json"}, body, keepalive: true })
+      .catch(() => {});
+  }
+  function pushOffline(){
+    const body = payload(false); if(!body) return;
+    if(navigator.sendBeacon) navigator.sendBeacon(ENDPOINT, new Blob([body], {type: "application/json"}));
+    else push(false);
+  }
+
+  let t = null;
+  window.addEventListener("mg-track", () => { clearTimeout(t); t = setTimeout(() => push(true), 800); });
+  setInterval(() => { if(document.visibilityState === "visible") push(true); }, HEARTBEAT_MS);
+  document.addEventListener("visibilitychange", () => { document.visibilityState === "visible" ? push(true) : pushOffline(); });
+  window.addEventListener("pagehide", pushOffline);
+  push(true);
+})();
+</script>
+</body>
+</html>

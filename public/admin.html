@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin · Mal und Geteilt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAFCFF; --grid:#DCE7F6; --line:#C9D6EA;
+  --ink:#1B3A8C; --ink-soft:#E3EAFA; --on-ink:#FFFFFF;
+  --text:#1E2533; --muted:#556072;
+  --ok:#1F8A55; --ok-soft:#DDF3E6; --bad:#D33A2C; --bad-soft:#FBDDD8;
+  --warn:#B7791F; --off:#8A93A5;
+  --sans:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131A29; --grid:#1E2940; --line:#2C3A58;
+    --ink:#A9C1FF; --ink-soft:#243150; --on-ink:#0F1626;
+    --text:#E8EDF6; --muted:#A1ACC1;
+    --ok:#56CC92; --ok-soft:#163627; --bad:#FF7466; --bad-soft:#47201C;
+    --warn:#E5B454; --off:#6C768A; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131A29; --grid:#1E2940; --line:#2C3A58;
+  --ink:#A9C1FF; --ink-soft:#243150; --on-ink:#0F1626;
+  --text:#E8EDF6; --muted:#A1ACC1;
+  --ok:#56CC92; --ok-soft:#163627; --bad:#FF7466; --bad-soft:#47201C;
+  --warn:#E5B454; --off:#6C768A; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{background:var(--paper)}
+body{margin:0;min-height:100vh;background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;color:var(--text);font-family:var(--sans);font-size:1.05rem;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 20px 60px}
+h1{font-size:clamp(1.8rem,5vw,2.4rem);color:var(--ink);margin:12px 0 6px;line-height:1.15}
+h2{font-size:1.25rem;color:var(--ink);margin:28px 0 10px}
+p{margin:0 0 10px;max-width:65ch}
+.muted{color:var(--muted)}
+.btn{font:700 1rem var(--sans);min-height:46px;padding:10px 20px;border-radius:12px;border:2px solid var(--ink);background:var(--ink);color:var(--on-ink);cursor:pointer}
+.btn.secondary{background:transparent;color:var(--ink)}
+.btn.danger{background:transparent;color:var(--bad);border-color:var(--bad)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:12px}
+.panel{background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:22px;max-width:520px;margin-top:20px}
+.pin{font:700 2rem var(--sans);letter-spacing:.2em;width:100%;max-width:280px;border:0;border-bottom:4px solid var(--ink);background:transparent;color:var(--text);padding:4px 0}
+.msg{min-height:1.5em;font-weight:700;margin-top:10px}
+.msg.bad{color:var(--bad)} .msg.ok{color:var(--ok)}
+
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:20px 0 4px}
+.sum{background:var(--paper);border-left:4px solid var(--ink);padding:10px 14px}
+.sum b{display:block;font-size:2rem;line-height:1.1;color:var(--ink)}
+.sum span{color:var(--muted);font-size:.95rem}
+.sum.online{border-color:var(--ok)} .sum.online b{color:var(--ok)}
+.sum.wrong{border-color:var(--bad)} .sum.wrong b{color:var(--bad)}
+
+.tablewrap{overflow-x:auto;background:var(--paper);border:2px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:860px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.9rem;color:var(--muted);font-weight:700;background:var(--ink-soft)}
+td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+tr.item{cursor:pointer}
+tr.item:hover td{background:var(--ink-soft)}
+.status{display:inline-flex;align-items:center;gap:8px;font-weight:700;white-space:nowrap}
+.status i{width:12px;height:12px;border-radius:50%;display:inline-block;background:var(--off)}
+.status.on i{background:var(--ok);box-shadow:0 0 0 4px var(--ok-soft)}
+.status.recent i{background:var(--warn)}
+.status.on{color:var(--ok)} .status.recent{color:var(--warn)} .status.off{color:var(--muted)}
+.name{font-weight:700}
+.wrongnum{color:var(--bad)} .oknum{color:var(--ok)}
+.details td{background:var(--ink-soft)}
+.attempts{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+.att{padding:4px 10px;border-radius:8px;border:2px solid;font-weight:700;font-variant-numeric:tabular-nums}
+.att.ok{border-color:var(--ok);color:var(--ok)} .att.bad{border-color:var(--bad);color:var(--bad)}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+.code{font:700 2.4rem var(--sans);letter-spacing:.25em;color:var(--ink)}
+.linkbtn{back<script>
+(function(){
+"use strict";
+const API = "/api/admin";
+const REFRESH_MS = 10 * 60 * 1000;   // alle 10 Minuten neu laden
+const ONLINE_MS  = 11 * 60 * 1000;   // Heartbeat kommt alle 10 Min., 1 Min. Puffer
+const RECENT_MS  = 60 * 60 * 1000;
+
+const app = document.getElementById("app");
+const esc = x => String(x ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const getToken = () => { try{ return localStorage.getItem("mg_admin_token") || ""; }catch(e){ return ""; } };
+const setToken = t => { try{ t ? localStorage.setItem("mg_admin_token", t) : localStorage.removeItem("mg_admin_token"); }catch(e){} };
+
+async function api(action, extra){
+  const res = await fetch(API, { method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify(Object.assign({ action, token: getToken() }, extra || {})) });
+  let data = {};
+  try{ data = await res.json(); }catch(e){}
+  if(!res.ok){ const err = new Error(data.error || ("Fehler " + res.status)); err.status = res.status; throw err; }
+  return data;
+}
+
+let learners = [];
+let openId = null;
+let refreshTimer = null, tickTimer = null, nextRefreshAt = 0, serverNow = 0, devices = 1;
+
+/* ---------- Start ---------- */
+(async function init(){
+  if(!getToken()){ renderLogin(); return; }
+  try{ await api("check"); startDashboard(); }
+  catch(e){ if(e.status === 401) setToken(""); renderLogin(e.status === 401 ? "" : "Server nicht erreichbar: " + e.message); }
+})();
+
+/* ---------- Anmelden ---------- */
+function renderLogin(note, mode){
+  mode = mode || "pin";
+  const isPin = mode === "pin";
+  app.innerHTML = `
+    <h1>${isPin ? "Owner werden" : "Gerät verbinden"}</h1>
+    <p>${isPin
+      ? "Gib deine Einmal-PIN ein. Sie funktioniert nur ein einziges Mal. Danach merkt sich dieser Browser, dass du der Owner bist."
+      : "Öffne das Admin-Panel auf einem Gerät, auf dem du schon angemeldet bist, klick auf „Anderes Gerät verbinden“ und gib den 6-stelligen Code hier ein."}</p>
+    <div class="panel">
+      <label for="pin" style="font-weight:700;display:block;margin-bottom:8px">${isPin ? "Einmal-PIN" : "Gerätecode"}</label>
+      <input id="pin" class="pin" type="${isPin ? "password" : "text"}" inputmode="numeric" autocomplete="off" maxlength="12">
+      <p class="msg bad" id="msg" aria-live="polite">${esc(note || "")}</p>
+      <div class="row" style="margin-top:12px"><button class="btn" id="go">Bestätigen</button></div>
+    </div>
+    <p style="margin-top:18px"><button class="linkbtn" id="switch">${isPin ? "Ich habe einen Gerätecode" : "Ich habe eine Einmal-PIN"}</button></p>`;
+  const pin = document.getElementById("pin");
+  const msg = document.getElementById("msg");
+  const btn = document.getElementById("go");
+  const submit = async () => {
+    const v = pin.value.trim();
+    if(!v){ msg.className = "msg bad"; msg.textContent = isPin ? "Gib die PIN ein." : "Gib den Code ein."; return; }
+    btn.disabled = true;
+    try{
+      const r = await api(isPin ? "claim" : "link", isPin ? { pin: v, device: navigator.userAgent } : { code: v, device: navigator.userAgent });
+      setToken(r.token);
+      msg.className = "msg ok"; msg.textContent = "Geschafft, du bist angemeldet.";
+      setTimeout(startDashboard, 500);
+    }catch(e){
+      msg.className = "msg bad"; msg.textContent = e.message;
+      pin.value = ""; pin.focus(); btn.disabled = false;
+    }
+  };
+  pin.addEventListener("keydown", e => { if(e.key === "Enter") submit(); });
+  btn.onclick = submit;
+  document.getElementById("switch").onclick = () => renderLogin("", isPin ? "code" : "pin");
+  pin.focus();
+}
+
+/* ---------- Dashboard ---------- */
+function stopTimers(){ clearInterval(refreshTimer); clearInterval(tickTimer); }
+
+async function startDashboard(){
+  stopTimers();
+  app.innerHTML = `
+    <div class="bar">
+      <div>
+        <h1>Admin-Panel</h1>
+        <p class="muted" style="margin:0">Mal und Geteilt lernen</p>
+      </div>
+      <div class="row">
+        <span class="muted" id="countdown"></span>
+        <button class="btn secondary" id="reload">Jetzt aktualisieren</button>
+      </div>
+    </div>
+    <div class="summary" id="summary"></div>
+    <h2>Lernende</h2>
+    <p class="muted">Klick auf eine Zeile, um die letzten Versuche zu sehen.</p>
+    <div class="tablewrap" id="table"></div>
+    <h2>Zugang</h2>
+    <p class="muted" id="devinfo"></p>
+    <div class="row">
+      <button class="btn secondary" id="newcode">Anderes Gerät verbinden</button>
+      <button class="btn danger" id="logout">Auf diesem Gerät abmelden</button>
+    </div>
+    <div id="codebox"></div>`;
+  document.getElementById("reload").onclick = () => load();
+  document.getElementById("newcode").onclick = async () => {
+    const box = document.getElementById("codebox");
+    try{
+      const r = await api("newcode");
+      box.innerHTML = `<div class="panel"><p>Gib diesen Code auf dem anderen Gerät unter <b>/admin.html → „Ich habe einen Gerätecode“</b> ein. Er gilt ${r.validMinutes} Minuten und nur einmal.</p><p class="code">${esc(r.code)}</p></div>`;
+    }catch(e){ handleErr(e); }
+  };
+  document.getElementById("logout").onclick = async () => {
+    const warn = devices > 1
+      ? "Wirklich abmelden? Du kannst dich später mit einem Gerätecode von einem deiner anderen Geräte wieder verbinden."
+      : "Achtung: Das ist dein einziges angemeldetes Gerät. Wenn du dich abmeldest, kommst du nur mit einer NEUEN PIN wieder rein (in Netlify ADMIN_PIN ändern). Trotzdem abmelden?";
+    if(!confirm(warn)) return;
+    try{ await api("logout"); }catch(e){}
+    setToken(""); stopTimers(); renderLogin();
+  };
+  await load();
+  refreshTimer = setInterval(load, REFRESH_MS);
+  tickTimer = setInterval(updateCountdown, 1000);
+}
+
+function handleErr(e){
+  if(e.status === 401){ setToken(""); stopTimers(); renderLogin("Dein Zugang ist nicht mehr gültig. Melde dich neu an."); return true; }
+  alert(e.message); return false;
+}
+
+async function load(){
+  const btn = document.getElementById("reload");
+  if(btn) btn.disabled = true;
+  try{
+    const r = await api("list");
+    learners = r.learners || [];
+    serverNow = r.now || Date.now();
+    devices = r.devices || 1;
+    nextRefreshAt = Date.now() + REFRESH_MS;
+    const di = document.getElementById("devinfo");
+    if(di) di.textContent = `Angemeldete Geräte: ${devices}`;
+    renderData();
+  }catch(e){
+    if(e.status === 401){ handleErr(e); return; }
+    const t = document.getElementById("table");
+    if(t) t.innerHTML = `<div class="empty">Daten konnten nicht geladen werden (${esc(e.message)}).</div>`;
+  }
+  if(btn) btn.disabled = false;
+  updateCountdown();
+}
+
+function updateCountdown(){
+  const el = document.getElementById("countdown");
+  if(!el || !nextRefreshAt) return;
+  const s = Math.max(0, Math.round((nextRefreshAt - Date.now())/1000));
+  el.textContent = `Nächste Aktualisierung in ${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+}
+
+function statusOf(l){
+  const diff = serverNow - (l.lastSeen || 0);
+  if(l.online && diff < ONLINE_MS) return {cls:"on", text:"Online", rank:0};
+  if(diff < RECENT_MS) return {cls:"recent", text:"Kürzlich aktiv", rank:1};
+  return {cls:"off", text:"Offline", rank:2};
+}
+
+function ago(t){
+  if(!t) return "–";
+  const d = Math.max(0, serverNow + (Date.now() - (nextRefreshAt - REFRESH_MS)) - t);
+  const m = Math.floor(d/60000);
+  if(m < 1) return "gerade eben";
+  if(m < 60) return `vor ${m} Min.`;
+  const h = Math.floor(m/60);
+  if(h < 24) return `vor ${h} Std.`;
+  const days = Math.floor(h/24);
+  if(days < 7) return `vor ${days} ${days === 1 ? "Tag" : "Tagen"}`;
+  return new Date(t).toLocaleDateString("de-DE");
+}
+const clock = t => new Date(t).toLocaleString("de-DE", {day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit"});
+
+function renderData(){
+  const rows = learners.map(l => ({...l, st: statusOf(l)}))
+    .sort((a,b) => a.st.rank - b.st.rank || (b.lastSeen||0) - (a.lastSeen||0));
+
+  const online = rows.filter(r => r.st.rank === 0).length;
+  const sumOk = rows.reduce((s,r) => s + (r.correct||0), 0);
+  const sumBad = rows.reduce((s,r) => s + (r.wrong||0), 0);
+  const quote = sumOk + sumBad ? Math.round(sumOk/(sumOk+sumBad)*100) + " %" : "–";
+  document.getElementById("summary").innerHTML = `
+    <div class="sum online"><b>${online}</b><span>gerade online</span></div>
+    <div class="sum"><b>${rows.length}</b><span>Lernende insgesamt</span></div>
+    <div class="sum"><b>${sumOk}</b><span>Aufgaben richtig</span></div>
+    <div class="sum wrong"><b>${sumBad}</b><span>Fehler insgesamt</span></div>
+    <div class="sum"><b>${quote}</b><span>Trefferquote</span></div>`;
+
+  const table = document.getElementById("table");
+  if(!rows.length){
+    table.innerHTML = `<div class="empty">Noch niemand da. Sobald jemand die Lernseite öffnet und seinen Namen eingibt, taucht er hier auf.</div>`;
+    return;
+  }
+
+  let html = `<table><thead><tr>
+    <th>Status</th><th>Name</th><th>Gerade bei</th><th>Lernteil</th>
+    <th style="text-align:right">Richtig</th><th style="text-align:right">Fehler</th><th style="text-align:right">Quote</th><th>Zuletzt aktiv</th>
+  </tr></thead><tbody>`;
+  for(const r of rows){
+    const c = r.correct||0, w = r.wrong||0;
+    const q = c + w ? Math.round(c/(c+w)*100) + " %" : "–";
+    const where = r.st.rank === 2 ? `<span class="muted">zuletzt: ${esc(r.detail)}</span>` : esc(r.detail);
+    html += `<tr class="item" data-id="${esc(r.id)}" tabindex="0" aria-expanded="${openId === r.id}">
+      <td><span class="status ${r.st.cls}"><i></i>${r.st.text}</span></td>
+      <td class="name">${esc(r.name)}</td>
+      <td>${where}</td>
+      <td>${esc(r.learnStage || "–")}</td>
+      <td class="num oknum">${c}</td>
+      <td class="num wrongnum">${w}</td>
+      <td class="num">${q}</td>
+      <td>${ago(r.lastSeen)}</td>
+    </tr>`;
+    if(openId === r.id){
+      const last = (r.last || []).slice().reverse();
+      html += `<tr class="details"><td colspan="8">
+        <b>Letzte Versuche</b> <span class="muted">(neueste zuerst)</span>
+        <div class="attempts">${last.length ? last.map(a =>
+          `<span class="att ${a.ok ? "ok" : "bad"}" title="${esc(clock(a.at))}">${esc(a.t)} = ${esc(a.a)} ${a.ok ? "✓" : "✗"}</span>`).join("") : `<span class="muted">Noch keine Aufgaben gerechnet.</span>`}</div>
+        <p class="muted">Schwierigkeit: ${esc(r.level || "–")}. Ohne Fehler hintereinander: ${r.streak||0}. Dabei seit: ${r.firstSeen ? clock(r.firstSeen) : "–"}.</p>
+        <button class="btn danger" data-del="${esc(r.id)}" data-name="${esc(r.name)}">Eintrag löschen</button>
+      </td></tr>`;
+    }
+  }
+  html += `</tbody></table>`;
+  table.innerHTML = html;
+
+  table.querySelectorAll("tr.item").forEach(tr => {
+    const toggle = () => { openId = openId === tr.dataset.id ? null : tr.dataset.id; renderData(); };
+    tr.onclick = toggle;
+    tr.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(); } };
+  });
+  table.querySelectorAll("[data-del]").forEach(b => b.onclick = async e => {
+    e.stopPropagation();
+    if(!confirm(`Eintrag von „${b.dataset.name}“ wirklich löschen?`)) return;
+    try{ await api("delete", { id: b.dataset.del }); openId = null; await load(); }
+    catch(err){ handleErr(err); }
+  });
+}
+})();
+</script>)) return;
+    try{ await deleteDoc(doc(db, "learners", b.dataset.del)); openId = null; await load(); }
+    catch(err){ alert("Löschen fehlgeschlagen: " + (err.code || err.message)); }
+  });
+}
+</script>
+</body>
+</html>
