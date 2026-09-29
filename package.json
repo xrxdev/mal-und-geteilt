@@ -1,0 +1,8 @@
+{
+  "name": "mal-und-geteilt",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}
