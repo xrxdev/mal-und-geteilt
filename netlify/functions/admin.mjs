@@ -143,7 +143,7 @@ export default async (req) => {
     await Promise.all(blobs.map(async b => {
       const rec = await learnersStore.get(b.key, { type: "json" });
       if (!rec) return;
-      rec.correct = 0; rec.wrong = 0; rec.streak = 0; rec.last = [];
+      rec.correct = 0; rec.wrong = 0; rec.streak = 0; rec.last = []; rec.helps = 0; rec.helpLog = [];
       await learnersStore.setJSON(b.key, rec);
     }));
     return json({ ok: true });
@@ -177,7 +177,7 @@ export default async (req) => {
       if (type === "setname") rec.name = str(body.text, 30).trim();
       const cmd = { id: randomBytes(6).toString("hex"), type, text: str(body.text, 500), at: now };
       rec.cmds = [...(rec.cmds || []).filter(c => now - c.at < 60 * 60 * 1000), cmd].slice(-10);
-      if (type === "reset") { rec.correct = 0; rec.wrong = 0; rec.streak = 0; rec.last = []; }
+      if (type === "reset") { rec.correct = 0; rec.wrong = 0; rec.streak = 0; rec.last = []; rec.helps = 0; rec.helpLog = []; }
     }
     await learnersStore.setJSON(body.id, rec);
     return json({ ok: true });

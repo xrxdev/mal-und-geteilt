@@ -48,6 +48,11 @@ export default async (req) => {
     wrong: int(data.wrong),
     streak: int(data.streak),
     last,
+    helps: int(data.helps),
+    helpLog: (Array.isArray(data.helpLog) ? data.helpLog : []).slice(-30).map(x => {
+      const at = Math.floor(Number(x && x.at));
+      return { t: str(x && x.t, 30), k: str(x && x.k, 20), l: str(x && x.l, 20), at: Number.isFinite(at) && at > 0 && at < now + 60000 ? at : now };
+    }),
     online: !!data.online,
     lastSeen: now,
     firstSeen: (old && old.firstSeen) || now,
