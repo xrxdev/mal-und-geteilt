@@ -84,7 +84,13 @@ tr.item:hover td{background:var(--ink-soft)}
 .att.ok{border-color:var(--ok);color:var(--ok)} .att.bad{border-color:var(--bad);color:var(--bad)}
 .empty{padding:28px;text-align:center;color:var(--muted)}
 .code{font:700 2.4rem var(--sans);letter-spacing:.25em;color:var(--ink)}
-.linkbtn{back<script>
+.linkbtn{background:none;border:0;padding:0;color:var(--ink);font:700 1rem var(--sans);text-decoration:underline;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"><p class="muted">Lädt …</p></div>
+
+<script>
 (function(){
 "use strict";
 const API = "/api/admin";
@@ -324,11 +330,6 @@ function renderData(){
   });
 }
 })();
-</script>)) return;
-    try{ await deleteDoc(doc(db, "learners", b.dataset.del)); openId = null; await load(); }
-    catch(err){ alert("Löschen fehlgeschlagen: " + (err.code || err.message)); }
-  });
-}
 </script>
 </body>
 </html>
