@@ -14,7 +14,8 @@
   --ink:#1B3A8C; --ink-soft:#E3EAFA; --on-ink:#FFFFFF;
   --text:#1E2533; --muted:#556072;
   --ok:#1F8A55; --ok-soft:#DDF3E6; --bad:#D33A2C; --bad-soft:#FBDDD8;
-  --warn:#B7791F; --off:#8A93A5;
+  --warn:#B7791F; --off:#8A93A5; --grid-major:#C3D4EE;
+  --m-rot:#D93A3F; --m-orange:#E07A12; --m-gelb:#B98A00; --m-gruen:#1E9460; --m-blau:#2F6FE0; --m-lila:#7C4DDB; --m-pink:#D23C85;
   --sans:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   color-scheme:light; box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
@@ -25,7 +26,8 @@
     --ink:#A9C1FF; --ink-soft:#243150; --on-ink:#0F1626;
     --text:#E8EDF6; --muted:#A1ACC1;
     --ok:#56CC92; --ok-soft:#163627; --bad:#FF7466; --bad-soft:#47201C;
-    --warn:#E5B454; --off:#6C768A; color-scheme:dark;
+    --warn:#E5B454; --off:#6C768A; --grid-major:#27365A;
+    --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#B79CFF; --m-pink:#FF7EB8; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
@@ -33,13 +35,14 @@
   --ink:#A9C1FF; --ink-soft:#243150; --on-ink:#0F1626;
   --text:#E8EDF6; --muted:#A1ACC1;
   --ok:#56CC92; --ok-soft:#163627; --bad:#FF7466; --bad-soft:#47201C;
-  --warn:#E5B454; --off:#6C768A; color-scheme:dark;
+  --warn:#E5B454; --off:#6C768A; --grid-major:#27365A;
+    --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#B79CFF; --m-pink:#FF7EB8; color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:inherit}
 html{background:var(--paper)}
 body{margin:0;min-height:100vh;background-color:var(--paper);
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:24px 24px;color:var(--text);font-family:var(--sans);font-size:1.05rem;line-height:1.5}
+  background-image:linear-gradient(var(--grid-major) 1px,transparent 1px),linear-gradient(90deg,var(--grid-major) 1px,transparent 1px),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:120px 120px,120px 120px,24px 24px,24px 24px;color:var(--text);font-family:var(--sans);font-size:1.05rem;line-height:1.5}
 .wrap{max-width:1100px;margin:0 auto;padding:20px 20px 60px}
 h1{font-size:clamp(1.8rem,5vw,2.4rem);color:var(--ink);margin:12px 0 6px;line-height:1.15}
 h2{font-size:1.25rem;color:var(--ink);margin:28px 0 10px}
@@ -85,6 +88,33 @@ tr.item:hover td{background:var(--ink-soft)}
 .empty{padding:28px;text-align:center;color:var(--muted)}
 .code{font:700 2.4rem var(--sans);letter-spacing:.25em;color:var(--ink)}
 .linkbtn{background:none;border:0;padding:0;color:var(--ink);font:700 1rem var(--sans);text-decoration:underline;cursor:pointer}
+
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.card{background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:20px;margin-top:22px}
+.card h2{margin-top:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 22px}
+label.l{display:block;font-weight:700;margin:12px 0 6px}
+textarea,.inp,select{font:1rem var(--sans);color:var(--text);background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{width:100%;resize:vertical;min-height:84px}
+.inp{min-height:44px} select{min-height:44px}
+textarea:focus-visible,.inp:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.toolbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.tb{font:700 .95rem var(--sans);min-height:40px;min-width:40px;padding:6px 12px;border-radius:10px;border:2px solid var(--line);background:var(--paper);color:var(--text);cursor:pointer}
+.tb:hover{border-color:var(--ink)}
+.sw{width:40px;padding:0;border-radius:50%;border:3px solid var(--paper);box-shadow:0 0 0 2px var(--line)}
+.sw:hover{box-shadow:0 0 0 2px var(--ink)}
+.preview{border:2px dashed var(--line);border-radius:12px;padding:12px 14px;min-height:48px;font-size:1.1rem;overflow-wrap:anywhere}
+.small{font-size:.92rem}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-weight:700;font-size:.85rem;border:2px solid currentColor}
+.pill.on{color:var(--ok)} .pill.off{color:var(--muted)} .pill.bad{color:var(--bad)}
+.active{margin-top:14px;padding:12px 14px;border-left:4px solid var(--ok);background:var(--ok-soft);border-radius:8px}
+.m-big{font-size:1.5em;line-height:1.2}
+.m-rot{color:var(--m-rot)} .m-orange{color:var(--m-orange)} .m-gelb{color:var(--m-gelb)} .m-gruen{color:var(--m-gruen)}
+.m-blau{color:var(--m-blau)} .m-lila{color:var(--m-lila)} .m-pink{color:var(--m-pink)}
+.search{max-width:280px;width:100%}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn.sm{min-height:40px;padding:6px 14px;font-size:.95rem}
+.banned td{opacity:.6}
 </style>
 </head>
 <body>
@@ -97,11 +127,24 @@ const API = "/api/admin";
 const REFRESH_MS = 10 * 60 * 1000;   // alle 10 Minuten neu laden
 const ONLINE_MS  = 11 * 60 * 1000;   // Heartbeat kommt alle 10 Min., 1 Min. Puffer
 const RECENT_MS  = 60 * 60 * 1000;
+const LEVELS = ["sehrleicht","leicht","mittel","schwer","sehrschwer","extrem"];
+const LEVEL_NAMES = {sehrleicht:"Sehr leicht", leicht:"Leicht", mittel:"Mittel", schwer:"Schwer", sehrschwer:"Sehr schwer", extrem:"Extrem schwer"};
+const COLORS = [["rot","Rot"],["orange","Orange"],["gelb","Gelb"],["gruen","Grün"],["blau","Blau"],["lila","Lila"],["pink","Pink"]];
 
 const app = document.getElementById("app");
 const esc = x => String(x ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const getToken = () => { try{ return localStorage.getItem("mg_admin_token") || ""; }catch(e){ return ""; } };
 const setToken = t => { try{ t ? localStorage.setItem("mg_admin_token", t) : localStorage.removeItem("mg_admin_token"); }catch(e){} };
+
+function renderMarkup(src){
+  let h = esc(src || "");
+  h = h.replace(/\*\*([\s\S]+?)\*\*/g, "<strong>$1</strong>");
+  h = h.replace(/\[gross\]([\s\S]*?)\[\/gross\]/g, '<span class="m-big">$1</span>');
+  for(let i = 0; i < 2; i++){
+    h = h.replace(/\[(rot|orange|gelb|gruen|blau|lila|pink)\]([\s\S]*?)\[\/\1\]/g, '<span class="m-$1">$2</span>');
+  }
+  return h.replace(/\n/g, "<br>");
+}
 
 async function api(action, extra){
   const res = await fetch(API, { method:"POST", headers:{"Content-Type":"application/json"},
@@ -112,8 +155,8 @@ async function api(action, extra){
   return data;
 }
 
-let learners = [];
-let openId = null;
+let learners = [], config = {};
+let openId = null, search = "";
 let refreshTimer = null, tickTimer = null, nextRefreshAt = 0, serverNow = 0, devices = 1;
 
 /* ---------- Start ---------- */
@@ -128,13 +171,14 @@ function renderLogin(note, mode){
   mode = mode || "pin";
   const isPin = mode === "pin";
   app.innerHTML = `
+    <div class="row" style="justify-content:flex-end"><a class="btn secondary sm" href="/">← Zur Lernseite</a></div>
     <h1>${isPin ? "Owner werden" : "Gerät verbinden"}</h1>
     <p>${isPin
       ? "Gib deine Einmal-PIN ein. Sie funktioniert nur ein einziges Mal. Danach merkt sich dieser Browser, dass du der Owner bist."
       : "Öffne das Admin-Panel auf einem Gerät, auf dem du schon angemeldet bist, klick auf „Anderes Gerät verbinden“ und gib den 6-stelligen Code hier ein."}</p>
     <div class="panel">
       <label for="pin" style="font-weight:700;display:block;margin-bottom:8px">${isPin ? "Einmal-PIN" : "Gerätecode"}</label>
-      <input id="pin" class="pin" type="${isPin ? "password" : "text"}" inputmode="numeric" autocomplete="off" maxlength="12">
+      <input id="pin" class="pin" type="${isPin ? "password" : "text"}" autocomplete="off" maxlength="30">
       <p class="msg bad" id="msg" aria-live="polite">${esc(note || "")}</p>
       <div class="row" style="margin-top:12px"><button class="btn" id="go">Bestätigen</button></div>
     </div>
@@ -176,25 +220,170 @@ async function startDashboard(){
       <div class="row">
         <span class="muted" id="countdown"></span>
         <button class="btn secondary" id="reload">Jetzt aktualisieren</button>
+        <a class="btn" href="/">← Zur Lernseite</a>
       </div>
     </div>
     <div class="summary" id="summary"></div>
-    <h2>Lernende</h2>
-    <p class="muted">Klick auf eine Zeile, um die letzten Versuche zu sehen.</p>
-    <div class="tablewrap" id="table"></div>
-    <h2>Zugang</h2>
-    <p class="muted" id="devinfo"></p>
-    <div class="row">
-      <button class="btn secondary" id="newcode">Anderes Gerät verbinden</button>
-      <button class="btn danger" id="logout">Auf diesem Gerät abmelden</button>
+
+    <section class="card" aria-labelledby="bc-h">
+      <h2 id="bc-h">📢 Nachricht an alle</h2>
+      <p class="muted small">Erscheint als schmales Banner oben auf der Seite. Alle können dabei ganz normal weiterlernen und das Banner auch wegklicken. Wer gerade auf der Seite ist, sieht es innerhalb von 30 Sekunden. Text markieren und dann Fett, Groß oder eine Farbe anklicken.</p>
+      <div class="toolbar" role="toolbar" aria-label="Formatierung">
+        <button class="tb" data-wrap="**|**"><b>Fett</b></button>
+        <button class="tb" data-wrap="[gross]|[/gross]">Groß</button>
+        ${COLORS.map(([c,n]) => `<button class="tb sw" style="background:var(--m-${c})" data-wrap="[${c}]|[/${c}]" aria-label="${n}" title="${n}"></button>`).join("")}
+      </div>
+      <textarea id="bctext" maxlength="500" placeholder="z. B. UPDATE IN 5 MIN!"></textarea>
+      <label class="l">Vorschau</label>
+      <div class="preview" id="bcprev"><span class="muted">Hier siehst du, wie die Nachricht aussieht.</span></div>
+      <div class="row" style="margin-top:14px">
+        <label for="bcdur" style="font-weight:700">Anzeigen für</label>
+        <input class="inp" id="bcdur" type="number" min="1" value="5" style="width:90px">
+        <select id="bcunit" aria-label="Einheit">
+          <option value="1">Sekunden</option>
+          <option value="60" selected>Minuten</option>
+          <option value="3600">Stunden</option>
+        </select>
+        <button class="btn" id="bcsend">Senden</button>
+      </div>
+      <p class="msg" id="bcmsg" aria-live="polite"></p>
+      <div id="bcactive"></div>
+    </section>
+
+    <section class="card" aria-labelledby="ctl-h">
+      <h2 id="ctl-h">⚙️ Seite steuern</h2>
+      <div class="grid2">
+        <div>
+          <label class="l">Wartungsmodus <span id="mstate"></span></label>
+          <p class="muted small" style="margin:0 0 8px">Alle sehen einen Pausen-Bildschirm, nur du nicht.</p>
+          <input class="inp" id="mtext" maxlength="300" placeholder="Text, z. B. Wir sind gleich wieder da!" style="width:100%">
+          <div class="btnrow"><button class="btn sm" id="mon">Einschalten</button><button class="btn secondary sm" id="moff">Ausschalten</button></div>
+        </div>
+        <div>
+          <label class="l" for="flevel">Schwierigkeit für alle</label>
+          <p class="muted small" style="margin:0 0 8px">Legt fest, welche Stufe alle beim Üben bekommen.</p>
+          <div class="row">
+            <select id="flevel">
+              <option value="">Frei wählbar</option>
+              ${LEVELS.map(l => `<option value="${l}">${LEVEL_NAMES[l]}</option>`).join("")}
+            </select>
+            <button class="btn sm" id="fset">Übernehmen</button>
+          </div>
+        </div>
+        <div>
+          <label class="l">Alle Seiten neu laden</label>
+          <p class="muted small" style="margin:0 0 8px">Praktisch nach einem Update, damit alle die neue Version bekommen.</p>
+          <button class="btn secondary sm" id="reloadall">Bei allen neu laden</button>
+        </div>
+        <div>
+          <label class="l">Daten</label>
+          <p class="muted small" style="margin:0 0 8px">Liste als Tabelle speichern oder alles löschen.</p>
+          <div class="btnrow" style="margin-top:0">
+            <button class="btn secondary sm" id="csv">Als CSV exportieren</button>
+            <button class="btn danger sm" id="delall">Alle Einträge löschen</button>
+          </div>
+        </div>
+      </div>
+      <p class="msg" id="ctlmsg" aria-live="polite"></p>
+    </section>
+
+    <div class="row" style="justify-content:space-between;margin-top:26px">
+      <h2 style="margin:0">Lernende</h2>
+      <input class="inp search" id="search" type="search" placeholder="Name suchen …" aria-label="Name suchen">
     </div>
-    <div id="codebox"></div>`;
+    <p class="muted">Klick auf eine Zeile für Details und Befehle.</p>
+    <div class="tablewrap" id="table"></div>
+
+    <section class="card" aria-labelledby="acc-h">
+      <h2 id="acc-h">🔑 Zugang</h2>
+      <p class="muted" id="devinfo"></p>
+      <label class="row" style="gap:10px;margin:4px 0 16px;cursor:pointer;font-weight:700">
+        <input type="checkbox" id="countself" style="width:22px;height:22px">
+        Mich auf diesem Gerät beim Lernen mitzählen (zum Testen)
+      </label>
+      <div class="row">
+        <button class="btn secondary" id="newcode">Anderes Gerät verbinden</button>
+        <button class="btn danger" id="logout">Auf diesem Gerät abmelden</button>
+      </div>
+      <div id="codebox"></div>
+    </section>`;
+
+  bindDashboard();
+  await load();
+  refreshTimer = setInterval(load, REFRESH_MS);
+  tickTimer = setInterval(() => { updateCountdown(); renderActive(); }, 1000);
+}
+
+function flash(id, text, ok){
+  const el = document.getElementById(id); if(!el) return;
+  el.className = "msg " + (ok ? "ok" : "bad"); el.textContent = text;
+  clearTimeout(el._t); el._t = setTimeout(() => { el.textContent = ""; }, 4000);
+}
+
+function bindDashboard(){
   document.getElementById("reload").onclick = () => load();
+
+  // Formatierung
+  const ta = document.getElementById("bctext");
+  const prev = document.getElementById("bcprev");
+  const updPrev = () => { prev.innerHTML = ta.value.trim() ? renderMarkup(ta.value) : `<span class="muted">Hier siehst du, wie die Nachricht aussieht.</span>`; };
+  ta.addEventListener("input", updPrev);
+  document.querySelectorAll("[data-wrap]").forEach(b => b.onclick = () => {
+    const [open, close] = b.dataset.wrap.split("|");
+    const s = ta.selectionStart, e = ta.selectionEnd;
+    const sel = ta.value.slice(s, e) || "Text";
+    ta.value = ta.value.slice(0, s) + open + sel + close + ta.value.slice(e);
+    ta.focus();
+    ta.setSelectionRange(s + open.length, s + open.length + sel.length);
+    updPrev();
+  });
+
+  document.getElementById("bcsend").onclick = async () => {
+    const text = ta.value.trim();
+    if(!text){ flash("bcmsg", "Schreib zuerst eine Nachricht.", false); ta.focus(); return; }
+    const n = Math.max(1, Number(document.getElementById("bcdur").value) || 1);
+    const seconds = n * Number(document.getElementById("bcunit").value);
+    try{
+      const r = await api("broadcast", { text, seconds, style: "banner" });
+      config.broadcast = r.broadcast; serverNow = Date.now();
+      flash("bcmsg", "Gesendet! Alle sehen sie gleich.", true);
+      ta.value = ""; updPrev(); renderActive(true);
+    }catch(e){ if(!handleErr(e)) flash("bcmsg", e.message, false); }
+  };
+
+  // Steuerung
+  const ctl = async (action, extra, okText) => {
+    try{ await api(action, extra); flash("ctlmsg", okText, true); await load(); }
+    catch(e){ if(!handleErr(e)) flash("ctlmsg", e.message, false); }
+  };
+  document.getElementById("mon").onclick = () => ctl("maintenance", { on:true, text: document.getElementById("mtext").value }, "Wartungsmodus ist an.");
+  document.getElementById("moff").onclick = () => ctl("maintenance", { on:false, text: document.getElementById("mtext").value }, "Wartungsmodus ist aus.");
+  document.getElementById("fset").onclick = () => {
+    const level = document.getElementById("flevel").value;
+    ctl("forceLevel", { level }, level ? `Alle üben jetzt auf „${LEVEL_NAMES[level]}“.` : "Alle können die Schwierigkeit wieder selbst wählen.");
+  };
+  document.getElementById("reloadall").onclick = () => {
+    if(confirm("Bei allen, die gerade auf der Seite sind, wird sie in den nächsten 30 Sekunden neu geladen. Weiter?"))
+      ctl("reloadAll", {}, "Alle Seiten werden neu geladen.");
+  };
+  document.getElementById("csv").onclick = exportCsv;
+  document.getElementById("delall").onclick = () => {
+    const t = prompt("Das löscht ALLE Lernenden mit ihren Zahlen. Tippe LÖSCHEN zum Bestätigen:");
+    if(t && t.trim().toUpperCase() === "LÖSCHEN") ctl("deleteAll", {}, "Alle Einträge wurden gelöscht.");
+  };
+
+  const cs = document.getElementById("countself");
+  try{ cs.checked = localStorage.getItem("mg_count_self") === "1"; }catch(e){}
+  cs.onchange = () => { try{ cs.checked ? localStorage.setItem("mg_count_self","1") : localStorage.removeItem("mg_count_self"); }catch(e){} };
+
+  document.getElementById("search").addEventListener("input", e => { search = e.target.value.trim().toLowerCase(); renderData(); });
+
+  // Zugang
   document.getElementById("newcode").onclick = async () => {
     const box = document.getElementById("codebox");
     try{
       const r = await api("newcode");
-      box.innerHTML = `<div class="panel"><p>Gib diesen Code auf dem anderen Gerät unter <b>/admin.html → „Ich habe einen Gerätecode“</b> ein. Er gilt ${r.validMinutes} Minuten und nur einmal.</p><p class="code">${esc(r.code)}</p></div>`;
+      box.innerHTML = `<div class="panel"><p>Tippe auf dem anderen Gerät 5-mal auf den Titel der Lernseite, wähle <b>„Ich habe einen Gerätecode“</b> und gib diesen Code ein. Er gilt ${r.validMinutes} Minuten und nur einmal.</p><p class="code">${esc(r.code)}</p></div>`;
     }catch(e){ handleErr(e); }
   };
   document.getElementById("logout").onclick = async () => {
@@ -205,14 +394,11 @@ async function startDashboard(){
     try{ await api("logout"); }catch(e){}
     setToken(""); stopTimers(); renderLogin();
   };
-  await load();
-  refreshTimer = setInterval(load, REFRESH_MS);
-  tickTimer = setInterval(updateCountdown, 1000);
 }
 
 function handleErr(e){
   if(e.status === 401){ setToken(""); stopTimers(); renderLogin("Dein Zugang ist nicht mehr gültig. Melde dich neu an."); return true; }
-  alert(e.message); return false;
+  return false;
 }
 
 async function load(){
@@ -221,19 +407,65 @@ async function load(){
   try{
     const r = await api("list");
     learners = r.learners || [];
+    config = r.config || {};
     serverNow = r.now || Date.now();
     devices = r.devices || 1;
     nextRefreshAt = Date.now() + REFRESH_MS;
     const di = document.getElementById("devinfo");
     if(di) di.textContent = `Angemeldete Geräte: ${devices}`;
+    renderControls();
+    renderActive(true);
     renderData();
   }catch(e){
-    if(e.status === 401){ handleErr(e); return; }
+    if(handleErr(e)) return;
     const t = document.getElementById("table");
     if(t) t.innerHTML = `<div class="empty">Daten konnten nicht geladen werden (${esc(e.message)}).</div>`;
   }
   if(btn) btn.disabled = false;
   updateCountdown();
+}
+
+function renderControls(){
+  const m = config.maintenance || {};
+  const ms = document.getElementById("mstate");
+  if(ms) ms.innerHTML = m.on ? `<span class="pill bad">AN</span>` : `<span class="pill off">aus</span>`;
+  const mt = document.getElementById("mtext");
+  if(mt && document.activeElement !== mt) mt.value = m.text || "";
+  const fl = document.getElementById("flevel");
+  if(fl && document.activeElement !== fl) fl.value = config.forcedLevel || "";
+}
+
+function fmtLeft(ms){
+  const s = Math.max(0, Math.round(ms/1000));
+  if(s < 60) return `${s} Sek.`;
+  const m = Math.floor(s/60);
+  if(m < 60) return `${m} Min. ${s%60} Sek.`;
+  const h = Math.floor(m/60);
+  return `${h} Std. ${m%60} Min.`;
+}
+
+let activeKey = "";
+function renderActive(force){
+  const box = document.getElementById("bcactive"); if(!box) return;
+  const b = config.broadcast;
+  const offset = Date.now() - (nextRefreshAt - REFRESH_MS);   // Zeit seit dem letzten Laden
+  const left = b ? b.until - (serverNow + offset) : 0;
+  if(!b || left <= 0){
+    if(activeKey !== "none"){ box.innerHTML = ""; activeKey = "none"; }
+    return;
+  }
+  if(force || activeKey !== b.id){
+    activeKey = b.id;
+    box.innerHTML = `<div class="active">
+      <b>Läuft gerade</b> <span class="muted small">(noch <span id="bcleft"></span>)</span>
+      <div class="preview" style="margin:8px 0;background:var(--paper)">${renderMarkup(b.text)}</div>
+      <button class="btn danger sm" id="bcstop">Jetzt beenden</button></div>`;
+    document.getElementById("bcstop").onclick = async () => {
+      try{ await api("clearBroadcast"); config.broadcast = null; renderActive(true); flash("bcmsg", "Nachricht beendet.", true); }
+      catch(e){ if(!handleErr(e)) flash("bcmsg", e.message, false); }
+    };
+  }
+  const l = document.getElementById("bcleft"); if(l) l.textContent = fmtLeft(left);
 }
 
 function updateCountdown(){
@@ -264,24 +496,45 @@ function ago(t){
 }
 const clock = t => new Date(t).toLocaleString("de-DE", {day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit"});
 
+function exportCsv(){
+  const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const rows = [["Name","Status","Gerade bei","Lernteil","Schwierigkeit","Richtig","Fehler","Quote","Zuletzt aktiv","Dabei seit","Gesperrt"]];
+  for(const l of learners){
+    const c = l.correct||0, w = l.wrong||0;
+    rows.push([l.name, statusOf(l).text, l.detail, l.learnStage, l.level, c, w, c+w ? Math.round(c/(c+w)*100)+" %" : "",
+      l.lastSeen ? clock(l.lastSeen) : "", l.firstSeen ? clock(l.firstSeen) : "", l.banned ? "ja" : "nein"]);
+  }
+  const csv = "\ufeff" + rows.map(r => r.map(q).join(";")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
+  a.download = `lernende-${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
 function renderData(){
-  const rows = learners.map(l => ({...l, st: statusOf(l)}))
+  const all = learners.map(l => ({...l, st: statusOf(l)}))
     .sort((a,b) => a.st.rank - b.st.rank || (b.lastSeen||0) - (a.lastSeen||0));
 
-  const online = rows.filter(r => r.st.rank === 0).length;
-  const sumOk = rows.reduce((s,r) => s + (r.correct||0), 0);
-  const sumBad = rows.reduce((s,r) => s + (r.wrong||0), 0);
+  const online = all.filter(r => r.st.rank === 0).length;
+  const sumOk = all.reduce((s,r) => s + (r.correct||0), 0);
+  const sumBad = all.reduce((s,r) => s + (r.wrong||0), 0);
   const quote = sumOk + sumBad ? Math.round(sumOk/(sumOk+sumBad)*100) + " %" : "–";
   document.getElementById("summary").innerHTML = `
     <div class="sum online"><b>${online}</b><span>gerade online</span></div>
-    <div class="sum"><b>${rows.length}</b><span>Lernende insgesamt</span></div>
+    <div class="sum"><b>${all.length}</b><span>Lernende insgesamt</span></div>
     <div class="sum"><b>${sumOk}</b><span>Aufgaben richtig</span></div>
     <div class="sum wrong"><b>${sumBad}</b><span>Fehler insgesamt</span></div>
     <div class="sum"><b>${quote}</b><span>Trefferquote</span></div>`;
 
+  const rows = search ? all.filter(r => String(r.name).toLowerCase().includes(search)) : all;
   const table = document.getElementById("table");
-  if(!rows.length){
+  if(!all.length){
     table.innerHTML = `<div class="empty">Noch niemand da. Sobald jemand die Lernseite öffnet und seinen Namen eingibt, taucht er hier auf.</div>`;
+    return;
+  }
+  if(!rows.length){
+    table.innerHTML = `<div class="empty">Niemand mit „${esc(search)}“ gefunden.</div>`;
     return;
   }
 
@@ -293,9 +546,9 @@ function renderData(){
     const c = r.correct||0, w = r.wrong||0;
     const q = c + w ? Math.round(c/(c+w)*100) + " %" : "–";
     const where = r.st.rank === 2 ? `<span class="muted">zuletzt: ${esc(r.detail)}</span>` : esc(r.detail);
-    html += `<tr class="item" data-id="${esc(r.id)}" tabindex="0" aria-expanded="${openId === r.id}">
+    html += `<tr class="item${r.banned ? " banned" : ""}" data-id="${esc(r.id)}" tabindex="0" aria-expanded="${openId === r.id}">
       <td><span class="status ${r.st.cls}"><i></i>${r.st.text}</span></td>
-      <td class="name">${esc(r.name)}</td>
+      <td class="name">${esc(r.name)}${r.banned ? ` <span class="pill bad">gesperrt</span>` : ""}</td>
       <td>${where}</td>
       <td>${esc(r.learnStage || "–")}</td>
       <td class="num oknum">${c}</td>
@@ -310,7 +563,15 @@ function renderData(){
         <div class="attempts">${last.length ? last.map(a =>
           `<span class="att ${a.ok ? "ok" : "bad"}" title="${esc(clock(a.at))}">${esc(a.t)} = ${esc(a.a)} ${a.ok ? "✓" : "✗"}</span>`).join("") : `<span class="muted">Noch keine Aufgaben gerechnet.</span>`}</div>
         <p class="muted">Schwierigkeit: ${esc(r.level || "–")}. Ohne Fehler hintereinander: ${r.streak||0}. Dabei seit: ${r.firstSeen ? clock(r.firstSeen) : "–"}.</p>
-        <button class="btn danger" data-del="${esc(r.id)}" data-name="${esc(r.name)}">Eintrag löschen</button>
+        <div class="btnrow">
+          <button class="btn sm" data-act="msg">Nachricht senden</button>
+          <button class="btn secondary sm" data-act="reset">Statistik zurücksetzen</button>
+          <button class="btn secondary sm" data-act="rename">Namen ändern lassen</button>
+          <button class="btn secondary sm" data-act="reload">Seite neu laden</button>
+          <button class="btn ${r.banned ? "secondary" : "danger"} sm" data-act="ban">${r.banned ? "Entsperren" : "Sperren"}</button>
+          <button class="btn danger sm" data-act="delete">Eintrag löschen</button>
+        </div>
+        <p class="muted small" style="margin-top:8px">Befehle kommen an, sobald die Person die Seite offen hat (innerhalb von 30 Sekunden).</p>
       </td></tr>`;
     }
   }
@@ -322,11 +583,33 @@ function renderData(){
     tr.onclick = toggle;
     tr.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(); } };
   });
-  table.querySelectorAll("[data-del]").forEach(b => b.onclick = async e => {
+  table.querySelectorAll("[data-act]").forEach(b => b.onclick = async e => {
     e.stopPropagation();
-    if(!confirm(`Eintrag von „${b.dataset.name}“ wirklich löschen?`)) return;
-    try{ await api("delete", { id: b.dataset.del }); openId = null; await load(); }
-    catch(err){ handleErr(err); }
+    const r = learners.find(l => l.id === openId); if(!r) return;
+    const name = r.name, act = b.dataset.act;
+    try{
+      if(act === "msg"){
+        const text = prompt(`Nachricht an ${name} (erscheint bei der Person als kleines Fenster):\n(Formatierung geht auch hier: **fett**, [rot]rot[/rot], [gross]groß[/gross])`);
+        if(!text || !text.trim()) return;
+        await api("cmd", { id: r.id, type: "msg", text });
+        alert("Nachricht verschickt.");
+      } else if(act === "reset"){
+        if(!confirm(`Richtig, Fehler und Verlauf von „${name}“ auf 0 setzen?`)) return;
+        await api("cmd", { id: r.id, type: "reset" });
+      } else if(act === "rename"){
+        if(!confirm(`„${name}“ muss beim nächsten Mal einen neuen Namen eingeben. Weiter?`)) return;
+        await api("cmd", { id: r.id, type: "rename" });
+      } else if(act === "reload"){
+        await api("cmd", { id: r.id, type: "reload" });
+      } else if(act === "ban"){
+        if(!r.banned && !confirm(`„${name}“ sperren? Die Person sieht dann nur noch „Zugang gesperrt“.`)) return;
+        await api("ban", { id: r.id, banned: !r.banned });
+      } else if(act === "delete"){
+        if(!confirm(`Eintrag von „${name}“ wirklich löschen?`)) return;
+        await api("delete", { id: r.id }); openId = null;
+      }
+      await load();
+    }catch(err){ if(!handleErr(err)) alert(err.message); }
   });
 }
 })();
