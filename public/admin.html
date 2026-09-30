@@ -16,6 +16,7 @@
   --ok:#1F8A55; --ok-soft:#DDF3E6; --bad:#D33A2C; --bad-soft:#FBDDD8;
   --warn:#B7791F; --off:#8A93A5; --grid-major:#C3D4EE;
   --m-rot:#D93A3F; --m-orange:#E07A12; --m-gelb:#B98A00; --m-gruen:#1E9460; --m-blau:#2F6FE0; --m-lila:#7C4DDB; --m-pink:#D23C85;
+  --m-dunkelrot:#8B1A1F; --m-gold:#A87B00; --m-dunkelgruen:#14532D; --m-tuerkis:#0E8C8C; --m-dunkelblau:#1B2F80; --m-braun:#8A5A2B; --m-grau:#6B7280;
   --sans:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   color-scheme:light; box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
@@ -27,7 +28,7 @@
     --text:#E8EDF6; --muted:#A1ACC1;
     --ok:#56CC92; --ok-soft:#163627; --bad:#FF7466; --bad-soft:#47201C;
     --warn:#E5B454; --off:#6C768A; --grid-major:#27365A;
-    --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#B79CFF; --m-pink:#FF7EB8; color-scheme:dark;
+    --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#B79CFF; --m-pink:#FF7EB8; --m-dunkelrot:#D6454C; --m-gold:#F5C84C; --m-dunkelgruen:#3FAF6E; --m-tuerkis:#4FD6D6; --m-dunkelblau:#6C86F0; --m-braun:#C99464; --m-grau:#A1ACC1; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
@@ -36,7 +37,7 @@
   --text:#E8EDF6; --muted:#A1ACC1;
   --ok:#56CC92; --ok-soft:#163627; --bad:#FF7466; --bad-soft:#47201C;
   --warn:#E5B454; --off:#6C768A; --grid-major:#27365A;
-    --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#B79CFF; --m-pink:#FF7EB8; color-scheme:dark;
+    --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#B79CFF; --m-pink:#FF7EB8; --m-dunkelrot:#D6454C; --m-gold:#F5C84C; --m-dunkelgruen:#3FAF6E; --m-tuerkis:#4FD6D6; --m-dunkelblau:#6C86F0; --m-braun:#C99464; --m-grau:#A1ACC1; color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:inherit}
 html{background:var(--paper)}
@@ -111,6 +112,24 @@ textarea:focus-visible,.inp:focus-visible,select:focus-visible{outline:3px solid
 .m-big{font-size:1.5em;line-height:1.2}
 .m-rot{color:var(--m-rot)} .m-orange{color:var(--m-orange)} .m-gelb{color:var(--m-gelb)} .m-gruen{color:var(--m-gruen)}
 .m-blau{color:var(--m-blau)} .m-lila{color:var(--m-lila)} .m-pink{color:var(--m-pink)}
+.m-dunkelrot{color:var(--m-dunkelrot)} .m-gold{color:var(--m-gold)} .m-dunkelgruen{color:var(--m-dunkelgruen)} .m-tuerkis{color:var(--m-tuerkis)}
+.m-dunkelblau{color:var(--m-dunkelblau)} .m-braun{color:var(--m-braun)} .m-grau{color:var(--m-grau)}
+.ownertag{color:var(--m-rot);font-weight:700;margin-right:.35em}
+.tpl{font:700 .9rem var(--sans);border:2px solid var(--line);background:var(--paper);color:var(--text);border-radius:999px;padding:6px 12px;cursor:pointer;min-height:36px}
+.tpl:hover{border-color:var(--ink)}
+.hist{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.hist li{display:flex;gap:10px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.hist .ht{flex:1;min-width:0;overflow-wrap:anywhere}
+.feed{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;max-height:340px;overflow:auto}
+.feed li{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:6px 10px;border-radius:8px;background:var(--ink-soft)}
+.feed .fk{font-weight:700} .feed .ok{color:var(--ok)} .feed .bad{color:var(--bad)}
+.lb{width:100%;border-collapse:collapse;min-width:0}
+.lb td,.lb th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+.lb td.r,.lb th.r{text-align:right;font-variant-numeric:tabular-nums}
+.medal{font-size:1.2rem}
+.note{background:var(--ink-soft);border-left:4px solid var(--m-gold);padding:8px 12px;border-radius:8px;margin:8px 0}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-weight:700;cursor:pointer}
+.toggle input{width:20px;height:20px}
 .search{max-width:280px;width:100%}
 .btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .btn.sm{min-height:40px;padding:6px 14px;font-size:.95rem}
@@ -129,7 +148,16 @@ const ONLINE_MS  = 11 * 60 * 1000;   // Heartbeat kommt alle 10 Min., 1 Min. Puf
 const RECENT_MS  = 60 * 60 * 1000;
 const LEVELS = ["sehrleicht","leicht","mittel","schwer","sehrschwer","extrem"];
 const LEVEL_NAMES = {sehrleicht:"Sehr leicht", leicht:"Leicht", mittel:"Mittel", schwer:"Schwer", sehrschwer:"Sehr schwer", extrem:"Extrem schwer"};
-const COLORS = [["rot","Rot"],["orange","Orange"],["gelb","Gelb"],["gruen","Grün"],["blau","Blau"],["lila","Lila"],["pink","Pink"]];
+const COLORS = [["rot","Rot"],["dunkelrot","Dunkelrot"],["orange","Orange"],["gelb","Gelb"],["gold","Gold"],["gruen","Grün"],["dunkelgruen","Dunkelgrün"],["tuerkis","Türkis"],["blau","Blau"],["dunkelblau","Dunkelblau"],["lila","Lila"],["pink","Pink"],["braun","Braun"],["grau","Grau"]];
+const TOPICS = [["mix","Gemischt"],["plus","Plus"],["minus","Minus"],["mul","Mal"],["div","Geteilt"],["frac","Brüche"],["root","Wurzeln"],["pot","Potenzen"],["proz","Prozent"],["regeln","Punkt vor Strich"]];
+const TEMPLATES = [
+  ["Update", "[rot]**UPDATE IN 5 MIN!**[/rot] Bitte kurz fertig rechnen."],
+  ["Lob", "[gruen]**Super gemacht, alle!**[/gruen] Weiter so 💪"],
+  ["Neu", "[blau]**Neue Aufgaben sind da!**[/blau] Schaut mal unter „Lernen“."],
+  ["Challenge", "[gold]**Challenge:**[/gold] Wer schafft heute 20 Aufgaben ohne Fehler?"],
+  ["Wartung", "[dunkelrot]**Gleich kurze Wartung!**[/dunkelrot] Die Seite ist ein paar Minuten weg."],
+  ["Pause", "[tuerkis]**Zeit für eine Pause!**[/tuerkis] Trink was und mach gleich weiter."]
+];
 
 const app = document.getElementById("app");
 const esc = x => String(x ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -141,7 +169,7 @@ function renderMarkup(src){
   h = h.replace(/\*\*([\s\S]+?)\*\*/g, "<strong>$1</strong>");
   h = h.replace(/\[gross\]([\s\S]*?)\[\/gross\]/g, '<span class="m-big">$1</span>');
   for(let i = 0; i < 2; i++){
-    h = h.replace(/\[(rot|orange|gelb|gruen|blau|lila|pink)\]([\s\S]*?)\[\/\1\]/g, '<span class="m-$1">$2</span>');
+    h = h.replace(/\[(rot|dunkelrot|orange|gelb|gold|gruen|dunkelgruen|tuerkis|blau|dunkelblau|lila|pink|braun|grau)\]([\s\S]*?)\[\/\1\]/g, '<span class="m-$1">$2</span>');
   }
   return h.replace(/\n/g, "<br>");
 }
@@ -157,7 +185,7 @@ async function api(action, extra){
 
 let learners = [], config = {};
 let openId = null, search = "";
-let refreshTimer = null, tickTimer = null, nextRefreshAt = 0, serverNow = 0, devices = 1;
+let refreshTimer = null, tickTimer = null, nextRefreshAt = 0, serverNow = 0, devices = 1, lastLoad = Date.now();
 
 /* ---------- Start ---------- */
 (async function init(){
@@ -208,6 +236,8 @@ function renderLogin(note, mode){
 
 /* ---------- Dashboard ---------- */
 function stopTimers(){ clearInterval(refreshTimer); clearInterval(tickTimer); }
+const refreshMs = () => { try{ return localStorage.getItem("mg_admin_live") === "1" ? 30000 : REFRESH_MS; }catch(e){ return REFRESH_MS; } };
+function restartRefresh(){ clearInterval(refreshTimer); refreshTimer = setInterval(load, refreshMs()); nextRefreshAt = Date.now() + refreshMs(); updateCountdown(); }
 
 async function startDashboard(){
   stopTimers();
@@ -218,6 +248,7 @@ async function startDashboard(){
         <p class="muted" style="margin:0">Mal und Geteilt lernen</p>
       </div>
       <div class="row">
+        <label class="toggle"><input type="checkbox" id="livemode"> Live (alle 30 Sek.)</label>
         <span class="muted" id="countdown"></span>
         <button class="btn secondary" id="reload">Jetzt aktualisieren</button>
         <a class="btn" href="/">← Zur Lernseite</a>
@@ -227,12 +258,13 @@ async function startDashboard(){
 
     <section class="card" aria-labelledby="bc-h">
       <h2 id="bc-h">📢 Nachricht an alle</h2>
-      <p class="muted small">Erscheint als schmales Banner oben auf der Seite. Alle können dabei ganz normal weiterlernen und das Banner auch wegklicken. Wer gerade auf der Seite ist, sieht es innerhalb von 30 Sekunden. Text markieren und dann Fett, Groß oder eine Farbe anklicken.</p>
+      <p class="muted small">Vor jeder Nachricht steht automatisch <b class="ownertag">OWNER:</b> in Rot. Sie erscheint als schmales Banner oben auf der Seite. Alle können dabei ganz normal weiterlernen und das Banner auch wegklicken. Wer gerade auf der Seite ist, sieht es innerhalb von 30 Sekunden. Text markieren und dann Fett, Groß oder eine Farbe anklicken.</p>
       <div class="toolbar" role="toolbar" aria-label="Formatierung">
         <button class="tb" data-wrap="**|**"><b>Fett</b></button>
         <button class="tb" data-wrap="[gross]|[/gross]">Groß</button>
         ${COLORS.map(([c,n]) => `<button class="tb sw" style="background:var(--m-${c})" data-wrap="[${c}]|[/${c}]" aria-label="${n}" title="${n}"></button>`).join("")}
       </div>
+      <div class="toolbar" aria-label="Vorlagen">${TEMPLATES.map(([n],i) => `<button class="tpl" data-tpl="${i}">${n}</button>`).join("")}</div>
       <textarea id="bctext" maxlength="500" placeholder="z. B. UPDATE IN 5 MIN!"></textarea>
       <label class="l">Vorschau</label>
       <div class="preview" id="bcprev"><span class="muted">Hier siehst du, wie die Nachricht aussieht.</span></div>
@@ -248,6 +280,7 @@ async function startDashboard(){
       </div>
       <p class="msg" id="bcmsg" aria-live="polite"></p>
       <div id="bcactive"></div>
+      <details style="margin-top:14px"><summary style="cursor:pointer;font-weight:700">Verlauf (letzte 10 Nachrichten)</summary><ul class="hist" id="bchist"></ul></details>
     </section>
 
     <section class="card" aria-labelledby="ctl-h">
@@ -271,6 +304,17 @@ async function startDashboard(){
           </div>
         </div>
         <div>
+          <label class="l" for="ftopic">Thema für alle</label>
+          <p class="muted small" style="margin:0 0 8px">Legt fest, welches Thema alle beim Üben bekommen.</p>
+          <div class="row">
+            <select id="ftopic">
+              <option value="">Frei wählbar</option>
+              ${TOPICS.map(([k,n]) => `<option value="${k}">${n}</option>`).join("")}
+            </select>
+            <button class="btn sm" id="tset">Übernehmen</button>
+          </div>
+        </div>
+        <div>
           <label class="l">Alle Seiten neu laden</label>
           <p class="muted small" style="margin:0 0 8px">Praktisch nach einem Update, damit alle die neue Version bekommen.</p>
           <button class="btn secondary sm" id="reloadall">Bei allen neu laden</button>
@@ -280,12 +324,25 @@ async function startDashboard(){
           <p class="muted small" style="margin:0 0 8px">Liste als Tabelle speichern oder alles löschen.</p>
           <div class="btnrow" style="margin-top:0">
             <button class="btn secondary sm" id="csv">Als CSV exportieren</button>
+            <button class="btn secondary sm" id="resetall">Alle Statistiken auf 0</button>
             <button class="btn danger sm" id="delall">Alle Einträge löschen</button>
           </div>
         </div>
       </div>
       <p class="msg" id="ctlmsg" aria-live="polite"></p>
     </section>
+
+    <div class="grid2" style="gap:0 22px">
+      <section class="card" aria-labelledby="lb-h">
+        <h2 id="lb-h">🏆 Bestenliste</h2>
+        <div id="leader"></div>
+      </section>
+      <section class="card" aria-labelledby="feed-h">
+        <h2 id="feed-h">⚡ Live-Aktivität</h2>
+        <p class="muted small" style="margin-top:-4px">Die letzten gerechneten Aufgaben von allen.</p>
+        <ul class="feed" id="feed"></ul>
+      </section>
+    </div>
 
     <div class="row" style="justify-content:space-between;margin-top:26px">
       <h2 style="margin:0">Lernende</h2>
@@ -310,7 +367,7 @@ async function startDashboard(){
 
   bindDashboard();
   await load();
-  refreshTimer = setInterval(load, REFRESH_MS);
+  restartRefresh();
   tickTimer = setInterval(() => { updateCountdown(); renderActive(); }, 1000);
 }
 
@@ -326,7 +383,11 @@ function bindDashboard(){
   // Formatierung
   const ta = document.getElementById("bctext");
   const prev = document.getElementById("bcprev");
-  const updPrev = () => { prev.innerHTML = ta.value.trim() ? renderMarkup(ta.value) : `<span class="muted">Hier siehst du, wie die Nachricht aussieht.</span>`; };
+  const updPrev = () => { prev.innerHTML = ta.value.trim() ? `<strong class="ownertag">OWNER:</strong>` + renderMarkup(ta.value) : `<span class="muted">Hier siehst du, wie die Nachricht aussieht.</span>`; };
+  document.querySelectorAll("[data-tpl]").forEach(b => b.onclick = () => { ta.value = TEMPLATES[+b.dataset.tpl][1]; updPrev(); ta.focus(); });
+  const live = document.getElementById("livemode");
+  try{ live.checked = localStorage.getItem("mg_admin_live") === "1"; }catch(e){}
+  live.onchange = () => { try{ live.checked ? localStorage.setItem("mg_admin_live","1") : localStorage.removeItem("mg_admin_live"); }catch(e){} restartRefresh(); };
   ta.addEventListener("input", updPrev);
   document.querySelectorAll("[data-wrap]").forEach(b => b.onclick = () => {
     const [open, close] = b.dataset.wrap.split("|");
@@ -361,6 +422,15 @@ function bindDashboard(){
   document.getElementById("fset").onclick = () => {
     const level = document.getElementById("flevel").value;
     ctl("forceLevel", { level }, level ? `Alle üben jetzt auf „${LEVEL_NAMES[level]}“.` : "Alle können die Schwierigkeit wieder selbst wählen.");
+  };
+  document.getElementById("tset").onclick = () => {
+    const topic = document.getElementById("ftopic").value;
+    const n = (TOPICS.find(t => t[0] === topic) || [,""])[1];
+    ctl("forceTopic", { topic }, topic ? `Alle üben jetzt „${n}“.` : "Alle können das Thema wieder selbst wählen.");
+  };
+  document.getElementById("resetall").onclick = () => {
+    if(confirm("Richtig, Fehler und Verlauf von ALLEN Lernenden auf 0 setzen? Die Namen bleiben erhalten."))
+      ctl("resetAll", {}, "Alle Statistiken wurden auf 0 gesetzt.");
   };
   document.getElementById("reloadall").onclick = () => {
     if(confirm("Bei allen, die gerade auf der Seite sind, wird sie in den nächsten 30 Sekunden neu geladen. Weiter?"))
@@ -410,7 +480,8 @@ async function load(){
     config = r.config || {};
     serverNow = r.now || Date.now();
     devices = r.devices || 1;
-    nextRefreshAt = Date.now() + REFRESH_MS;
+    nextRefreshAt = Date.now() + refreshMs();
+    lastLoad = Date.now();
     const di = document.getElementById("devinfo");
     if(di) di.textContent = `Angemeldete Geräte: ${devices}`;
     renderControls();
@@ -433,6 +504,17 @@ function renderControls(){
   if(mt && document.activeElement !== mt) mt.value = m.text || "";
   const fl = document.getElementById("flevel");
   if(fl && document.activeElement !== fl) fl.value = config.forcedLevel || "";
+  const ft = document.getElementById("ftopic");
+  if(ft && document.activeElement !== ft) ft.value = config.forcedTopic || "";
+  const hist = document.getElementById("bchist");
+  if(hist){
+    const H = config.history || [];
+    hist.innerHTML = H.length ? H.map((h,i) => `<li><div class="ht"><strong class="ownertag">OWNER:</strong>${renderMarkup(h.text)}<div class="muted small">${clock(h.sent)}</div></div><button class="btn secondary sm" data-again="${i}">Nochmal</button></li>`).join("")
+      : `<li class="muted">Noch keine Nachrichten gesendet.</li>`;
+    hist.querySelectorAll("[data-again]").forEach(b => b.onclick = () => {
+      const ta = document.getElementById("bctext"); ta.value = H[+b.dataset.again].text; ta.dispatchEvent(new Event("input")); ta.focus(); ta.scrollIntoView({block:"center"});
+    });
+  }
 }
 
 function fmtLeft(ms){
@@ -448,7 +530,7 @@ let activeKey = "";
 function renderActive(force){
   const box = document.getElementById("bcactive"); if(!box) return;
   const b = config.broadcast;
-  const offset = Date.now() - (nextRefreshAt - REFRESH_MS);   // Zeit seit dem letzten Laden
+  const offset = Date.now() - lastLoad;   // Zeit seit dem letzten Laden
   const left = b ? b.until - (serverNow + offset) : 0;
   if(!b || left <= 0){
     if(activeKey !== "none"){ box.innerHTML = ""; activeKey = "none"; }
@@ -458,7 +540,7 @@ function renderActive(force){
     activeKey = b.id;
     box.innerHTML = `<div class="active">
       <b>Läuft gerade</b> <span class="muted small">(noch <span id="bcleft"></span>)</span>
-      <div class="preview" style="margin:8px 0;background:var(--paper)">${renderMarkup(b.text)}</div>
+      <div class="preview" style="margin:8px 0;background:var(--paper)"><strong class="ownertag">OWNER:</strong>${renderMarkup(b.text)}</div>
       <button class="btn danger sm" id="bcstop">Jetzt beenden</button></div>`;
     document.getElementById("bcstop").onclick = async () => {
       try{ await api("clearBroadcast"); config.broadcast = null; renderActive(true); flash("bcmsg", "Nachricht beendet.", true); }
@@ -484,7 +566,7 @@ function statusOf(l){
 
 function ago(t){
   if(!t) return "–";
-  const d = Math.max(0, serverNow + (Date.now() - (nextRefreshAt - REFRESH_MS)) - t);
+  const d = Math.max(0, serverNow + (Date.now() - lastLoad) - t);
   const m = Math.floor(d/60000);
   if(m < 1) return "gerade eben";
   if(m < 60) return `vor ${m} Min.`;
@@ -512,6 +594,25 @@ function exportCsv(){
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
 
+function renderLeader(all){
+  const el = document.getElementById("leader"); if(!el) return;
+  const top = all.filter(l => (l.correct||0) > 0).sort((a,b) => (b.correct||0) - (a.correct||0)).slice(0, 10);
+  if(!top.length){ el.innerHTML = `<p class="muted">Noch hat niemand eine Aufgabe gelöst.</p>`; return; }
+  const medal = i => ["🥇","🥈","🥉"][i] || `${i+1}.`;
+  el.innerHTML = `<table class="lb"><thead><tr><th>Platz</th><th>Name</th><th class="r">Richtig</th><th class="r">Quote</th></tr></thead><tbody>${
+    top.map((l,i) => { const c = l.correct||0, w = l.wrong||0; return `<tr><td class="medal">${medal(i)}</td><td><b>${esc(l.name)}</b></td><td class="r">${c}</td><td class="r">${c+w ? Math.round(c/(c+w)*100) + " %" : "–"}</td></tr>`; }).join("")
+  }</tbody></table>`;
+}
+function renderFeed(all){
+  const el = document.getElementById("feed"); if(!el) return;
+  const items = [];
+  for(const l of all) for(const a of (l.last || [])) items.push({name:l.name, ...a});
+  items.sort((a,b) => (b.at||0) - (a.at||0));
+  el.innerHTML = items.length ? items.slice(0, 25).map(a =>
+    `<li><span class="${a.ok ? "ok" : "bad"} fk">${a.ok ? "✓" : "✗"}</span><span><b>${esc(a.name)}</b>: ${esc(a.t)} = ${esc(a.a)}</span><span class="muted small">${ago(a.at)}</span></li>`).join("")
+    : `<li class="muted">Noch keine Aktivität.</li>`;
+}
+
 function renderData(){
   const all = learners.map(l => ({...l, st: statusOf(l)}))
     .sort((a,b) => a.st.rank - b.st.rank || (b.lastSeen||0) - (a.lastSeen||0));
@@ -527,6 +628,7 @@ function renderData(){
     <div class="sum wrong"><b>${sumBad}</b><span>Fehler insgesamt</span></div>
     <div class="sum"><b>${quote}</b><span>Trefferquote</span></div>`;
 
+  renderLeader(all); renderFeed(all);
   const rows = search ? all.filter(r => String(r.name).toLowerCase().includes(search)) : all;
   const table = document.getElementById("table");
   if(!all.length){
@@ -563,10 +665,13 @@ function renderData(){
         <div class="attempts">${last.length ? last.map(a =>
           `<span class="att ${a.ok ? "ok" : "bad"}" title="${esc(clock(a.at))}">${esc(a.t)} = ${esc(a.a)} ${a.ok ? "✓" : "✗"}</span>`).join("") : `<span class="muted">Noch keine Aufgaben gerechnet.</span>`}</div>
         <p class="muted">Schwierigkeit: ${esc(r.level || "–")}. Ohne Fehler hintereinander: ${r.streak||0}. Dabei seit: ${r.firstSeen ? clock(r.firstSeen) : "–"}.</p>
+        ${r.note ? `<div class="note">📝 ${esc(r.note)}</div>` : ""}
         <div class="btnrow">
           <button class="btn sm" data-act="msg">Nachricht senden</button>
           <button class="btn secondary sm" data-act="reset">Statistik zurücksetzen</button>
-          <button class="btn secondary sm" data-act="rename">Namen ändern lassen</button>
+          <button class="btn secondary sm" data-act="setname">Namen ändern</button>
+          <button class="btn secondary sm" data-act="rename">Neuen Namen eingeben lassen</button>
+          <button class="btn secondary sm" data-act="note">${r.note ? "Notiz bearbeiten" : "Notiz"}</button>
           <button class="btn secondary sm" data-act="reload">Seite neu laden</button>
           <button class="btn ${r.banned ? "secondary" : "danger"} sm" data-act="ban">${r.banned ? "Entsperren" : "Sperren"}</button>
           <button class="btn danger sm" data-act="delete">Eintrag löschen</button>
@@ -596,6 +701,14 @@ function renderData(){
       } else if(act === "reset"){
         if(!confirm(`Richtig, Fehler und Verlauf von „${name}“ auf 0 setzen?`)) return;
         await api("cmd", { id: r.id, type: "reset" });
+      } else if(act === "setname"){
+        const n = prompt(`Neuer Name für „${name}“:`, name);
+        if(!n || !n.trim() || n.trim() === name) return;
+        await api("cmd", { id: r.id, type: "setname", text: n.trim().slice(0,30) });
+      } else if(act === "note"){
+        const n = prompt(`Private Notiz zu „${name}“ (sieht nur du):`, r.note || "");
+        if(n === null) return;
+        await api("note", { id: r.id, text: n });
       } else if(act === "rename"){
         if(!confirm(`„${name}“ muss beim nächsten Mal einen neuen Namen eingeben. Weiter?`)) return;
         await api("cmd", { id: r.id, type: "rename" });

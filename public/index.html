@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<script>try{if(localStorage.getItem("mg_admin_token"))document.documentElement.classList.add("owner")}catch(e){}</script>
 <style>
 :root{
   --paper:#FAFCFF; --paper-2:#F1F5FC; --grid:#DCE7F6; --grid-major:#C3D4EE; --rand:#E9A3A3;
@@ -16,6 +17,7 @@
   --ok:#1F8A55; --ok-soft:#DDF3E6; --bad:#D33A2C; --bad-soft:#FBDDD8;
   --marker:#FFE36E; --glow:rgba(120,160,255,.14); --hole:#E4EAF4; --hole-edge:#C9D3E3; --doodle:#1B3A8C;
   --m-rot:#D93A3F; --m-orange:#E07A12; --m-gelb:#B98A00; --m-gruen:#1E9460; --m-blau:#2F6FE0; --m-lila:#7C4DDB; --m-pink:#D23C85;
+  --m-dunkelrot:#8B1A1F; --m-gold:#A87B00; --m-dunkelgruen:#14532D; --m-tuerkis:#0E8C8C; --m-dunkelblau:#1B2F80; --m-braun:#8A5A2B; --m-grau:#6B7280;
   --shadow:0 1px 2px rgba(20,40,90,.06),0 8px 24px rgba(20,40,90,.08);
   --sans:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   --hand:"Patrick Hand","Segoe Print","Comic Sans MS","Chalkboard SE",cursive;
@@ -31,7 +33,7 @@
     --text:#E8EDF6; --muted:#A1ACC1; --line:#2C3A58;
     --ok:#56CC92; --ok-soft:#163627; --bad:#FF7466; --bad-soft:#47201C;
     --marker:#6E5A12; --glow:rgba(110,150,255,.12); --hole:#0C111C; --hole-edge:#27324A; --doodle:#A9C1FF;
-    --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#B79CFF; --m-pink:#FF7EB8;
+    --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#B79CFF; --m-pink:#FF7EB8; --m-dunkelrot:#D6454C; --m-gold:#F5C84C; --m-dunkelgruen:#3FAF6E; --m-tuerkis:#4FD6D6; --m-dunkelblau:#6C86F0; --m-braun:#C99464; --m-grau:#A1ACC1;
     --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
     color-scheme:dark;
   }
@@ -42,7 +44,7 @@
   --text:#E8EDF6; --muted:#A1ACC1; --line:#2C3A58;
   --ok:#56CC92; --ok-soft:#163627; --bad:#FF7466; --bad-soft:#47201C;
   --marker:#6E5A12; --glow:rgba(110,150,255,.12); --hole:#0C111C; --hole-edge:#27324A; --doodle:#A9C1FF;
-  --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#B79CFF; --m-pink:#FF7EB8;
+  --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#B79CFF; --m-pink:#FF7EB8; --m-dunkelrot:#D6454C; --m-gold:#F5C84C; --m-dunkelgruen:#3FAF6E; --m-tuerkis:#4FD6D6; --m-dunkelblau:#6C86F0; --m-braun:#C99464; --m-grau:#A1ACC1;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
   color-scheme:dark;
 }
@@ -71,7 +73,7 @@ body{
 .brand{display:inline-flex;align-items:center;gap:10px;font:700 1.15rem var(--sans);color:var(--ink);background:none;border:0;padding:4px 0;cursor:pointer;-webkit-user-select:none;user-select:none}
 .logo{width:36px;height:36px;border-radius:10px;background:var(--ink);display:grid;place-items:center;box-shadow:var(--shadow)}
 .logo svg{width:24px;height:24px;stroke:var(--on-ink);stroke-width:2.6;stroke-linecap:round;fill:none}
-.top nav{display:flex;gap:4px;flex-wrap:wrap}
+.top nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
 .navbtn{font:700 1rem var(--sans);color:var(--ink);background:none;border:2px solid transparent;border-radius:999px;padding:6px 16px;cursor:pointer;min-height:44px;text-decoration:none;display:inline-flex;align-items:center}
 .navbtn:hover{background:var(--ink-soft)}
 .navbtn[aria-current="page"]{border-color:var(--ink)}
@@ -120,7 +122,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:12px}
 .tcard{--c:var(--m-blau);background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
 .tcard::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:var(--c)}
-.ticon{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font:700 1.9rem var(--sans);color:#fff;background:var(--c);flex:none}
+.ticon{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font:700 1.6rem var(--sans);white-space:nowrap;color:#fff;background:var(--c);flex:none}
 .tcard h3{font-size:1.3rem;margin:4px 0 0;color:var(--text)}
 .tcard p{margin:0;color:var(--muted);font-size:1rem}
 .tprog{height:8px;background:var(--ink-soft);border-radius:4px;overflow:hidden}
@@ -177,6 +179,11 @@ table.col tr.res td:first-child{border-top:0}
 .root .rs{position:relative}
 .root .rs sup{position:absolute;left:-.1em;top:.05em;font-size:.42em}
 .root .rad{border-top:.07em solid currentColor;padding:0 .12em;margin-top:.12em}
+.pow sup{font-size:.55em;vertical-align:super;line-height:0;margin-left:.04em}
+.pgrid{display:inline-grid;grid-template-columns:repeat(10,14px);gap:4px;padding:6px;border:2px solid var(--ink);border-radius:8px}
+.pgrid i{width:14px;height:14px;border-radius:3px;background:var(--ink-soft)}
+.pgrid i.on{background:var(--m-tuerkis)}
+.t-pot{--c:var(--m-dunkelblau)} .t-proz{--c:var(--m-tuerkis)} .t-regeln{--c:var(--m-braun)}
 
 /* ---------- Üben ---------- */
 .controls{display:flex;flex-direction:column;gap:14px;margin:8px 0 4px}
@@ -213,6 +220,9 @@ table.col tr.res td:first-child{border-top:0}
 .m-big{font-size:1.5em;line-height:1.2}
 .m-rot{color:var(--m-rot)} .m-orange{color:var(--m-orange)} .m-gelb{color:var(--m-gelb)} .m-gruen{color:var(--m-gruen)}
 .m-blau{color:var(--m-blau)} .m-lila{color:var(--m-lila)} .m-pink{color:var(--m-pink)}
+.m-dunkelrot{color:var(--m-dunkelrot)} .m-gold{color:var(--m-gold)} .m-dunkelgruen{color:var(--m-dunkelgruen)} .m-tuerkis{color:var(--m-tuerkis)}
+.m-dunkelblau{color:var(--m-dunkelblau)} .m-braun{color:var(--m-braun)} .m-grau{color:var(--m-grau)}
+.ownertag{color:var(--m-rot);font-weight:700;letter-spacing:.02em;margin-right:.35em}
 .bc{border-bottom:1px solid var(--grid-major);background:var(--paper-2)}
 .bc[hidden]{display:none}
 .bc-inner{max-width:780px;margin:0 auto;padding:10px 20px 10px 44px;display:flex;gap:12px;align-items:center}
@@ -232,6 +242,70 @@ table.col tr.res td:first-child{border-top:0}
 .ownernote{background:var(--m-orange);color:#111;font-weight:700;text-align:center;padding:6px 12px;font-size:.95rem}
 .ownernote[hidden]{display:none}
 
+
+/* ================= OWNER-MODUS: nur für den Owner sichtbar ================= */
+.aurora,#stars,.ownerbadge{display:none}
+html.owner{
+  --paper:#0A0714; --paper-2:#140E24; --grid:rgba(160,120,255,.07); --grid-major:rgba(245,200,76,.11); --rand:#F5C84C;
+  --ink:#F5C84C; --ink-soft:rgba(245,200,76,.14); --on-ink:#1A1204;
+  --text:#F4F1FF; --muted:#B9B0D6; --line:rgba(245,200,76,.26);
+  --ok:#5BE3A0; --ok-soft:rgba(91,227,160,.13); --bad:#FF6B7A; --bad-soft:rgba(255,107,122,.15);
+  --marker:rgba(245,200,76,.38); --glow:rgba(170,90,255,.22); --hole:#05030A; --hole-edge:rgba(245,200,76,.45); --doodle:#F5C84C;
+  --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#C4A6FF; --m-pink:#FF7EB8;
+  --m-dunkelrot:#E0525A; --m-gold:#F5C84C; --m-dunkelgruen:#3FAF6E; --m-tuerkis:#4FD6D6; --m-dunkelblau:#8BA0FF; --m-braun:#D9A574; --m-grau:#B9B0D6;
+  --shadow:0 0 0 1px rgba(245,200,76,.06),0 12px 40px rgba(0,0,0,.55);
+  color-scheme:dark;
+}
+html.owner body{background-color:var(--paper)}
+html.owner .aurora{display:block;position:fixed;inset:-25%;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(38% 32% at 18% 22%, rgba(168,85,247,.38), transparent 70%),
+    radial-gradient(34% 30% at 82% 18%, rgba(245,200,76,.24), transparent 70%),
+    radial-gradient(42% 38% at 65% 88%, rgba(56,189,248,.24), transparent 70%),
+    radial-gradient(30% 28% at 30% 80%, rgba(236,72,153,.18), transparent 70%);
+  filter:blur(24px);animation:aur 24s ease-in-out infinite alternate}
+@keyframes aur{0%{transform:translate(0,0) rotate(0deg) scale(1)}50%{transform:translate(4%,-3%) rotate(10deg) scale(1.06)}100%{transform:translate(-4%,3%) rotate(-8deg) scale(1)}}
+html.owner #stars{display:block;position:fixed;inset:0;z-index:0;pointer-events:none;width:100%;height:100%}
+html.owner .deco span,html.owner .deco svg{opacity:.18;text-shadow:0 0 12px rgba(245,200,76,.6)}
+html.owner .topbar{background:rgba(10,7,20,.72);border-bottom:1px solid rgba(245,200,76,.25);box-shadow:0 1px 0 rgba(245,200,76,.08),0 10px 30px rgba(0,0,0,.35)}
+html.owner .logo{background:linear-gradient(135deg,#FFE08A,#F5C84C 50%,#C084FC);box-shadow:0 0 18px rgba(245,200,76,.55)}
+html.owner .ownerbadge{display:inline-flex;align-items:center;gap:6px;margin-left:10px;padding:3px 10px;border-radius:999px;font:700 .8rem var(--sans);letter-spacing:.12em;color:#1A1204;
+  background:linear-gradient(135deg,#FFE08A,#F5C84C 55%,#E8A93A);box-shadow:0 0 14px rgba(245,200,76,.55)}
+html.owner h1{background:linear-gradient(90deg,#FFE9A8 0%,#F5C84C 35%,#E0A6FF 75%,#8BD3FF 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+html.owner h2{color:#F5C84C}
+html.owner .btn{background:linear-gradient(135deg,#FFE08A,#F5C84C 45%,#D99A1E);border-color:#F5C84C;color:#1A1204;box-shadow:0 0 0 1px rgba(255,224,138,.35),0 8px 26px rgba(245,200,76,.28)}
+html.owner .btn:hover{filter:brightness(1.1);box-shadow:0 0 0 1px rgba(255,224,138,.5),0 10px 34px rgba(245,200,76,.45)}
+html.owner .btn.secondary{background:rgba(245,200,76,.06);color:#F5C84C;box-shadow:none}
+html.owner .btn.secondary:hover{background:rgba(245,200,76,.14)}
+html.owner .tcard,html.owner .stat,html.owner .taskbox,html.owner .ocard,html.owner .modal{background:rgba(22,15,40,.66);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-color:var(--line)}
+html.owner .tcard{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+html.owner .tcard:hover{transform:translateY(-4px);border-color:rgba(245,200,76,.55);box-shadow:0 0 0 1px rgba(245,200,76,.25),0 18px 50px rgba(0,0,0,.6),0 0 40px rgba(168,85,247,.18)}
+html.owner .ticon{box-shadow:0 0 22px color-mix(in srgb,var(--c) 60%,transparent)}
+html.owner .seg button{background:rgba(245,200,76,.05)}
+html.owner .seg button[aria-pressed="true"]{background:linear-gradient(135deg,#FFE08A,#F5C84C);color:#1A1204;box-shadow:0 0 16px rgba(245,200,76,.4)}
+html.owner .navbtn[aria-current="page"]{border-color:#F5C84C;box-shadow:0 0 14px rgba(245,200,76,.3)}
+html.owner .steps>li::before{background:#1A1230;box-shadow:0 0 12px rgba(245,200,76,.35)}
+@media (prefers-reduced-motion: reduce){html.owner .aurora{animation:none}html.owner .tcard{transition:none}}
+
+/* Owner-Startseite */
+.ohero{padding:22px 0 4px;position:relative}
+.okicker{display:inline-flex;align-items:center;gap:8px;font:700 .85rem var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#F5C84C}
+.ohero h1{font-size:clamp(2.4rem,8vw,4rem);margin:10px 0 10px}
+.ogrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:16px}
+.ocard{border:2px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.ocard h3{display:flex;align-items:center;gap:8px;color:#F5C84C;margin:0 0 12px}
+.olist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:230px;overflow:auto}
+.olist li{display:flex;align-items:center;gap:10px;font-size:1rem}
+.olist .dotl{width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok);flex:none}
+.olist .sub{color:var(--muted);font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ocard textarea{width:100%;min-height:80px;resize:vertical;font:1rem var(--sans);color:var(--text);background:rgba(0,0,0,.25);border:2px solid var(--line);border-radius:12px;padding:10px 12px}
+.ocard select{font:1rem var(--sans);color:var(--text);background:rgba(0,0,0,.25);border:2px solid var(--line);border-radius:10px;min-height:44px;padding:6px 10px}
+.ocard textarea:focus-visible,.ocard select:focus-visible{outline:3px solid #F5C84C;outline-offset:2px}
+.ostack{display:flex;flex-direction:column;gap:10px}
+.ostack .btn{width:100%}
+.orow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.stat.live b{color:var(--ok);text-shadow:0 0 16px rgba(91,227,160,.6)}
+
 @media (max-width:520px){
   .top{padding-left:34px;padding-right:12px}
   .bc-inner{padding-left:34px;padding-right:12px}
@@ -245,6 +319,8 @@ table.col tr.res td:first-child{border-top:0}
 </style>
 </head>
 <body>
+<div class="aurora" aria-hidden="true"></div>
+<canvas id="stars" aria-hidden="true"></canvas>
 <div class="deco" aria-hidden="true">
   <span style="left:3%;top:12%;font-size:2.4rem;transform:rotate(-8deg)">7 · 8 = 56</span>
   <span style="left:9%;top:26%;font-size:4.5rem;transform:rotate(12deg)">+</span>
@@ -272,6 +348,7 @@ table.col tr.res td:first-child{border-top:0}
       <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4v6M3 7h6M15 7h6M4 15l5 5M9 15l-5 5M15 16h6M18 13.2v.1M18 18.8v.1"/></svg></span>
       <span class="bname">Rechnen lernen</span>
     </button>
+    <span class="ownerbadge" id="ownerbadge" hidden>👑 OWNER</span>
     <nav aria-label="Bereiche">
       <button class="navbtn" data-go="learn">Lernen</button>
       <button class="navbtn" data-go="practice">Üben</button>
@@ -307,14 +384,14 @@ table.col tr.res td:first-child{border-top:0}
   /* ================= Stufen ================= */
   const LEVELS = ["sehrleicht","leicht","mittel","schwer","sehrschwer","extrem"];
   const LEVEL_NAMES = {sehrleicht:"Sehr leicht", leicht:"Leicht", mittel:"Mittel", schwer:"Schwer", sehrschwer:"Sehr schwer", extrem:"Extrem schwer"};
-  const G = { forcedLevel: null };
+  const G = { forcedLevel: null, forcedTopic: null };
 
   function renderMarkup(src){
     let h = esc(src || "");
     h = h.replace(/\*\*([\s\S]+?)\*\*/g, "<strong>$1</strong>");
     h = h.replace(/\[gross\]([\s\S]*?)\[\/gross\]/g, '<span class="m-big">$1</span>');
     for(let i = 0; i < 2; i++){
-      h = h.replace(/\[(rot|orange|gelb|gruen|blau|lila|pink)\]([\s\S]*?)\[\/\1\]/g, '<span class="m-$1">$2</span>');
+      h = h.replace(/\[(rot|dunkelrot|orange|gelb|gold|gruen|dunkelgruen|tuerkis|blau|dunkelblau|lila|pink|braun|grau)\]([\s\S]*?)\[\/\1\]/g, '<span class="m-$1">$2</span>');
     }
     return h.replace(/\n/g, "<br>");
   }
@@ -634,6 +711,126 @@ table.col tr.res td:first-child{border-top:0}
     return Sx;
   }
 
+  /* ================= POTENZEN ================= */
+  const SUP = n => String(n).split("").map(ch => "⁰¹²³⁴⁵⁶⁷⁸⁹"[+ch]).join("");
+  const powHTML = (a, n) => `<span class="pow">${a}<sup>${n}</sup></span>`;
+  function potSteps(t){
+    const {a, n, ans} = t, Sx = [];
+    let m;
+    if(n === 0) m = `<p><b>${a} hoch 0</b> ist eine Sonderregel: <b>Jede Zahl hoch 0 ergibt 1</b> (außer 0 selbst).</p>`;
+    else if(n === 1) m = `<p><b>${a} hoch 1</b> heißt: Die ${a} kommt genau einmal vor. Es wird also gar nichts malgenommen.</p>`;
+    else {
+      m = `<p><b>${a} hoch ${n}</b> heißt: Nimm die ${a} genau ${n}-mal und rechne alles mal. Die große Zahl unten heißt <b>Grundzahl</b>, die kleine oben <b>Hochzahl</b>.</p>`;
+      if(n <= 8) m += L(`${powHTML(a,n)} = ${Array(n).fill(a).join(" · ")}`);
+    }
+    Sx.push({t:"Was bedeutet die Aufgabe?", h:m});
+    if(n === 2 && a >= 2 && a <= 10) Sx.push({t:"So sieht das aus", h:`<p>Hoch 2 heißt auch „zum Quadrat“, weil ${a} · ${a} Punkte genau ein Quadrat ergeben:</p>${dotGrid(a,a)}`});
+    let h;
+    if(n === 0) h = L(`${powHTML(a,0)} = 1`);
+    else if(n === 1) h = L(`${powHTML(a,1)} = ${a}`);
+    else if(a === 1) h = `<p>1 mal 1 bleibt immer 1, egal wie oft.</p>` + L(`${powHTML(1,n)} = 1`);
+    else if(a === 10) h = `<p>Bei 10 hoch ${n} schreibst du eine 1 mit ${n} Nullen dahinter.</p>` + L(`1 und ${n} Nullen  →  ${fmt(ans)}`);
+    else {
+      const lines = []; let v = a;
+      for(let i = 2; i <= n; i++){
+        const nv = v * a;
+        let line = `${fmt(v)} · ${a} = ${fmt(nv)}`;
+        if(a > 10 && a % 10 !== 0){
+          const z = Math.floor(a/10)*10, e = a % 10;
+          line += `   (${fmt(v)} · ${z} = ${fmt(v*z)}, ${fmt(v)} · ${e} = ${fmt(v*e)}, zusammen ${fmt(nv)})`;
+        }
+        lines.push(line); v = nv;
+      }
+      h = `<p>Rechne Schritt für Schritt: Du nimmst das Ergebnis immer wieder mal ${a}, bis du ${n} ${a === 2 ? "Zweien" : "Faktoren"} hast.</p>` + L(...lines);
+    }
+    Sx.push({t:"Rechenweg", h});
+    Sx.push({t:"Ergebnis", h:`<p class="result">${powHTML(a,n)} = <mark>${fmt(ans)}</mark></p>`});
+    return Sx;
+  }
+
+  /* ================= PROZENT ================= */
+  function percentGrid(p){
+    let c = ""; for(let i = 0; i < 100; i++) c += `<i class="${i < p ? "on" : ""}"></i>`;
+    return `<div class="viz"><div class="pgrid" aria-hidden="true">${c}</div></div>`;
+  }
+  function prozSteps(t){
+    const {p, g, ans} = t, Sx = [];
+    Sx.push({t:"Was bedeutet die Aufgabe?", h:`<p><b>${p} % von ${fmt(g)}</b>: Prozent heißt „von hundert“. Stell dir vor, ${fmt(g)} wird in 100 gleich große Teile geteilt. Davon nimmst du ${p} Teile.</p>`});
+    if(p <= 100) Sx.push({t:"So sieht das aus", h:`<p>Ein Feld mit 100 Kästchen ist das Ganze (100 %). ${p} davon sind eingefärbt:</p>${percentGrid(p)}`});
+    let h;
+    if(p === 100) h = `<p>100 % ist immer das Ganze.</p>` + L(`100 % von ${fmt(g)} = ${fmt(g)}`);
+    else if(p === 50) h = `<p>50 % ist genau die Hälfte.</p>` + L(`${fmt(g)} : 2 = ${fmt(ans)}`);
+    else if(p === 25) h = `<p>25 % ist ein Viertel. Du teilst durch 4.</p>` + L(`${fmt(g)} : 4 = ${fmt(ans)}`);
+    else if(p === 75) h = `<p>75 % sind drei Viertel: erst ein Viertel ausrechnen, dann mal 3.</p>` + L(`${fmt(g)} : 4 = ${fmt(g/4)}`, `3 · ${fmt(g/4)} = ${fmt(ans)}`);
+    else if(p === 10) h = `<p>10 % ist ein Zehntel. Du teilst durch 10 (eine 0 weg).</p>` + L(`${fmt(g)} : 10 = ${fmt(ans)}`);
+    else if(p === 1) h = `<p>1 % ist ein Hundertstel. Du teilst durch 100 (zwei Nullen weg).</p>` + L(`${fmt(g)} : 100 = ${fmt(ans)}`);
+    else if(g % 10 === 0 && p % 10 === 0 && p < 100){
+      const y = g / 10;
+      h = `<p>Rechne erst 10 % aus, das ist leicht. Dann nimmst du so oft mal, wie du Zehner-Prozente brauchst.</p>` +
+        L(`10 % von ${fmt(g)} = ${fmt(g)} : 10 = ${fmt(y)}`, `${p} % = ${p/10} · ${fmt(y)} = ${fmt(ans)}`);
+    } else if(g % 10 === 0 && p % 10 === 5 && p < 100 && (g/10) % 2 === 0){
+      const y = g / 10, half = y / 2, k = Math.floor(p/10), K = k * y;
+      h = `<p>Rechne erst 10 % aus. 5 % ist dann einfach die Hälfte davon.</p>` +
+        L(`10 % = ${fmt(g)} : 10 = ${fmt(y)}`, `5 % = ${fmt(y)} : 2 = ${fmt(half)}`) +
+        (k ? L(`${k*10} % = ${k} · ${fmt(y)} = ${fmt(K)}`, `${p} % = ${fmt(K)} + ${fmt(half)} = ${fmt(ans)}`) : L(`${p} % = ${fmt(half)}`));
+    } else if(g % 100 === 0){
+      const o = g / 100;
+      h = `<p>Rechne über 1 %: 1 % ist ein Hundertstel, also ${fmt(g)} : 100. Dann nimmst du das ${p}-mal.</p>` +
+        L(`1 % = ${fmt(g)} : 100 = ${fmt(o)}`, `${p} % = ${p} · ${fmt(o)} = ${fmt(ans)}`);
+    } else {
+      h = `<p>Allgemeiner Weg: erst mal ${p}, dann durch 100.</p>` + L(`${p} · ${fmt(g)} = ${fmt(p*g)}`, `${fmt(p*g)} : 100 = ${fmt(ans)}`);
+    }
+    if(p > 100) h += `<p>Mehr als 100 % heißt: Das Ergebnis ist größer als ${fmt(g)}.</p>`;
+    Sx.push({t:"Rechenweg", h});
+    Sx.push({t:"Ergebnis", h:`<p class="result">${p} % von ${fmt(g)} = <mark>${fmt(ans)}</mark></p>`});
+    return Sx;
+  }
+
+  /* ================= PUNKT VOR STRICH ================= */
+  const exprStr = tk => tk.map((x,i) => x === "(" ? "(" : x === ")" ? ")" : (typeof x === "number" ? fmt(x) : ` ${x} `)).join("")
+    .replace(/\(\s+/g, "(").replace(/\s+\)/g, ")").replace(/\s{2,}/g, " ").trim();
+  function exprSteps(tokens){
+    let tk = tokens.slice(); const out = []; let valid = true, guard = 0;
+    const calc = (a, op, b) => op === "+" ? a + b : op === "−" ? a - b : op === "·" ? a * b : a / b;
+    const collapse = t => { // (n) -> n
+      for(let i = 0; i + 2 < t.length; i++) if(t[i] === "(" && typeof t[i+1] === "number" && t[i+2] === ")"){ t.splice(i, 3, t[i+1]); i = -1; }
+      return t;
+    };
+    while(tk.length > 1 && ++guard < 50){
+      let s = 0, e = tk.length - 1, inParen = false;
+      let open = -1;
+      for(let i = 0; i < tk.length; i++){ if(tk[i] === "(") open = i; else if(tk[i] === ")"){ s = open + 1; e = i - 1; inParen = true; break; } }
+      const seg = tk.slice(s, e + 1);
+      let idx = seg.findIndex(x => x === "·" || x === ":");
+      const hasStrich = seg.some(x => x === "+" || x === "−");
+      let why;
+      if(idx >= 0) why = hasStrich ? "Punkt vor Strich" : "Von links nach rechts";
+      else { idx = seg.findIndex(x => x === "+" || x === "−"); why = "Von links nach rechts"; }
+      if(idx < 1) { valid = false; break; }
+      const a = seg[idx-1], op = seg[idx], b = seg[idx+1];
+      const v = calc(a, op, b);
+      if(!Number.isInteger(v) || v < 0) valid = false;
+      tk.splice(s + idx - 1, 3, v);
+      tk = collapse(tk);
+      const count = seg.filter(x => typeof x !== "number").length;
+      const desc = inParen ? `Klammer zuerst: ${fmt(a)} ${op} ${fmt(b)} = ${fmt(v)}`
+        : count === 1 ? `Jetzt der letzte Schritt: ${fmt(a)} ${op} ${fmt(b)} = ${fmt(v)}`
+        : `${why}: ${fmt(a)} ${op} ${fmt(b)} = ${fmt(v)}`;
+      out.push({desc, expr: exprStr(tk)});
+    }
+    return {steps: out, value: tk[0], valid: valid && tk.length === 1};
+  }
+  function regelnSteps(t){
+    const Sx = [], r = exprSteps(t.tk);
+    Sx.push({t:"Was bedeutet die Aufgabe?", h:`<p>Hier kommen mehrere Rechenarten vor. Dann ist die <b>Reihenfolge</b> wichtig:</p>` +
+      `<ul class="tricks"><li><b>1. Klammern zuerst.</b></li><li><b>2. Punkt vor Strich:</b> erst mal (·) und geteilt (:), dann plus (+) und minus (−).</li><li><b>3. Sonst von links nach rechts.</b></li></ul>`});
+    let h = L(exprStr(t.tk));
+    for(const s of r.steps) h += `<p style="margin:8px 0 0">${s.desc}</p>` + L(`= ${s.expr}`);
+    Sx.push({t:"Rechenweg", h});
+    Sx.push({t:"Ergebnis", h:`<p class="result">${exprStr(t.tk)} = <mark>${fmt(r.value)}</mark></p>`});
+    return Sx;
+  }
+
   /* ================= Aufgaben bauen ================= */
   const mk = {
     plus: (a,b) => ({topic:"plus", a, b, ans:a+b}),
@@ -641,7 +838,10 @@ table.col tr.res td:first-child{border-top:0}
     mul: (a,b) => ({topic:"mul", a, b, ans:a*b}),
     div: (a,b) => ({topic:"div", a, b, ans:a/b}),
     frac: (op,x,y) => ({topic:"frac", op, x, y, ans: fracCalc(op,x,y)}),
-    root: (n,kind) => ({topic:"root", n, kind, ans: Math.round(kind === 3 ? Math.cbrt(n) : Math.sqrt(n))})
+    root: (n,kind) => ({topic:"root", n, kind, ans: Math.round(kind === 3 ? Math.cbrt(n) : Math.sqrt(n))}),
+    pot: (a,n) => ({topic:"pot", a, n, ans: Math.pow(a,n)}),
+    proz: (p,g) => ({topic:"proz", p, g, ans: p*g/100}),
+    regeln: tk => ({topic:"regeln", tk, ans: exprSteps(tk).value})
   };
 
   const TOPICS = {
@@ -742,7 +942,72 @@ table.col tr.res td:first-child{border-top:0}
       }
     }
   };
-  const TOPIC_ORDER = ["plus","minus","mul","div","frac","root"];
+  TOPICS.pot = {
+    name:"Potenzen", icon:"x²", desc:"Hochzahlen: eine Zahl mehrmals mit sich selbst mal",
+    examples:[mk.pot(3,2), mk.pot(5,2), mk.pot(2,3), mk.pot(10,3), mk.pot(4,3), mk.pot(2,5), mk.pot(7,1), mk.pot(9,0), mk.pot(3,4), mk.pot(12,2)],
+    steps: potSteps,
+    gen(Lv){
+      if(Lv === "sehrleicht") return mk.pot(rnd(1,5), 2);
+      if(Lv === "leicht"){ const q = Math.random(); if(q < .15) return mk.pot(rnd(2,9), pick([0,1])); if(q < .35) return mk.pot(10, rnd(1,4)); return mk.pot(rnd(2,10), 2); }
+      if(Lv === "mittel") return Math.random() < .5 ? mk.pot(rnd(2,5), 3) : mk.pot(rnd(11,15), 2);
+      if(Lv === "schwer"){ const q = Math.random(); if(q < .4) return mk.pot(rnd(2,3), rnd(4,6)); if(q < .6) return mk.pot(10, rnd(3,6)); return mk.pot(rnd(16,20), 2); }
+      if(Lv === "sehrschwer") return mk.pot(rnd(4,9), rnd(3,4));
+      const q = Math.random(); if(q < .35) return mk.pot(2, rnd(7,12)); if(q < .7) return mk.pot(rnd(11,20), 3); return mk.pot(rnd(21,30), 2);
+    }
+  };
+  TOPICS.proz = {
+    name:"Prozent", icon:"%", desc:"Prozente ausrechnen, von 50 % bis 37 %",
+    examples:[mk.proz(50,80), mk.proz(10,70), mk.proz(25,40), mk.proz(100,65), mk.proz(75,200), mk.proz(30,90), mk.proz(15,60), mk.proz(1,500), mk.proz(37,300), mk.proz(150,80)],
+    steps: prozSteps,
+    gen(Lv){
+      let p, g, guard = 0;
+      do{
+        if(Lv === "sehrleicht"){ p = pick([10,50,100]); g = 10 * rnd(1,10); }
+        else if(Lv === "leicht"){ p = pick([10,25,50,75,100]); g = 20 * rnd(1,10); }
+        else if(Lv === "mittel"){ p = 10 * rnd(1,9); g = 10 * rnd(2,20); }
+        else if(Lv === "schwer"){ p = 5 * rnd(1,19); g = 20 * rnd(1,25); }
+        else if(Lv === "sehrschwer"){ p = rnd(1,99); g = 100 * rnd(1,20); }
+        else { p = Math.random() < .3 ? rnd(101,250) : rnd(1,99); g = 100 * rnd(10,99); }
+      } while((p * g) % 100 !== 0 && ++guard < 50);
+      return mk.proz(p, g);
+    }
+  };
+  TOPICS.regeln = {
+    name:"Punkt vor Strich", icon:"( )", desc:"Klammern, Punkt vor Strich und die richtige Reihenfolge",
+    examples:[mk.regeln([3,"+",4,"·",2]), mk.regeln([10,"−",2,"·",3]), mk.regeln([2,"·",5,"+",3]), mk.regeln([6,"+",8,":",2]),
+              mk.regeln([3,"·",4,"+",2,"·",5]), mk.regeln([20,"−",12,":",3]), mk.regeln(["(",3,"+",4,")","·",5]), mk.regeln(["(",15,"−",6,")","·",2]),
+              mk.regeln([4,"·",6,"−",10,":",2,"+",7]), mk.regeln(["(",12,"+",8,")","·","(",15,"−",7,")"])],
+    steps: regelnSteps,
+    gen(Lv){
+      let tk, guard = 0, r;
+      do{
+        const q = Math.random();
+        if(Lv === "sehrleicht"){ tk = [rnd(1,10),"+",rnd(1,5),"·",rnd(1,5)]; }
+        else if(Lv === "leicht"){
+          const b = rnd(2,6), c = rnd(2,6);
+          tk = q < .4 ? [rnd(1,30),"+",b,"·",c] : q < .7 ? [rnd(b*c, b*c+30),"−",b,"·",c] : [b,"·",c,"+",rnd(1,20)];
+        } else if(Lv === "mittel"){
+          const c = rnd(2,9);
+          tk = q < .5 ? [rnd(2,9),"·",rnd(2,9),"+",rnd(2,9),"·",rnd(2,9)] : [rnd(1,40),"+",c*rnd(2,9),":",c];
+        } else if(Lv === "schwer"){
+          const c = rnd(2,9), k = rnd(2,12);
+          if(q < .35) tk = ["(",rnd(2,20),"+",rnd(2,20),")","·",rnd(2,9)];
+          else if(q < .7) tk = [rnd(k, k+50),"−",c*k,":",c];
+          else { const b = rnd(2,20); tk = ["(",b + rnd(1,20),"−",b,")","·",rnd(2,9)]; }
+        } else if(Lv === "sehrschwer"){
+          const d = rnd(2,9), k = rnd(2,9), a = rnd(3,12), b = rnd(3,12);
+          tk = [a,"·",b,"−",d*k,":",d,"+",rnd(1,30)];
+        } else {
+          if(q < .35){ const d = rnd(2,20); tk = ["(",rnd(5,40),"+",rnd(5,40),")","·","(",d + rnd(1,12),"−",d,")"]; }
+          else if(q < .7){ const d = rnd(2,15); tk = [rnd(5,50),"+",rnd(2,12),"·","(",d + rnd(1,9),"−",d,")"]; }
+          else { const c = rnd(1,20), qq = rnd(2,9); tk = [qq * rnd(2,12),":","(",c + qq,"−",c,")","+",rnd(1,40)]; }
+        }
+        r = exprSteps(tk);
+      } while(!r.valid && ++guard < 100);
+      return mk.regeln(tk);
+    }
+  };
+  const TOPIC_ORDER = ["plus","minus","mul","div","frac","root","pot","proz","regeln"];
 
   function taskLabel(t){
     if(t.topic === "plus") return `${t.a} + ${t.b}`;
@@ -750,6 +1015,9 @@ table.col tr.res td:first-child{border-top:0}
     if(t.topic === "mul") return `${t.a} · ${t.b}`;
     if(t.topic === "div") return `${t.a} : ${t.b}`;
     if(t.topic === "frac") return `${fracStr(t.x)} ${t.op} ${fracStr(t.y)}`;
+    if(t.topic === "pot") return `${t.a}${SUP(t.n)}`;
+    if(t.topic === "proz") return `${t.p} % von ${t.g}`;
+    if(t.topic === "regeln") return exprStr(t.tk);
     return `${t.kind === 3 ? "∛" : "√"}${t.n}`;
   }
   function taskHTML(t){
@@ -758,6 +1026,9 @@ table.col tr.res td:first-child{border-top:0}
     if(t.topic === "mul") return `${t.a} · ${t.b}`;
     if(t.topic === "div") return `${t.a} : ${t.b}`;
     if(t.topic === "frac") return `${fracHTML(t.x)} ${t.op} ${fracHTML(t.y)}`;
+    if(t.topic === "pot") return powHTML(t.a, t.n);
+    if(t.topic === "proz") return `${t.p} % von ${fmt(t.g)}`;
+    if(t.topic === "regeln") return exprStr(t.tk);
     return rootHTML(t.n, t.kind);
   }
   const ansText = t => t.topic === "frac" ? fracStr(t.ans) : String(t.ans);
@@ -845,6 +1116,48 @@ table.col tr.res td:first-child{border-top:0}
       </ul>`
   };
 
+  INTRO.pot = () => `
+      <p class="lead">Potenzen sind eine Abkürzung für Mal-Rechnen.</p>
+      <p>Statt 2 · 2 · 2 schreibt man kurz ${powHTML(2,3)}. Sprich: „2 hoch 3“. Die 2 heißt <b>Grundzahl</b>, die kleine 3 oben heißt <b>Hochzahl</b>. Sie sagt, wie oft die 2 malgenommen wird.</p>
+      <p class="hand">${powHTML(2,3)} = 2 · 2 · 2 = 8</p>
+      <h2>Das solltest du wissen</h2>
+      <ul class="tricks">
+        <li><b>Hoch 2 heißt „zum Quadrat“.</b><span class="hand">5² = 5 · 5 = 25</span></li>
+        <li><b>Hoch 3 heißt „hoch drei“.</b><span class="hand">4³ = 4 · 4 · 4 = 64</span></li>
+        <li><b>10 hoch n: eine 1 mit n Nullen.</b><span class="hand">10⁴ = 10 000</span></li>
+        <li><b>Hoch 1: die Zahl selbst.</b><span class="hand">7¹ = 7</span></li>
+        <li><b>Hoch 0: immer 1.</b><span class="hand">9⁰ = 1</span></li>
+        <li><b>Schritt für Schritt rechnen.</b><span class="hand">3⁴ = 3 · 3 = 9, 9 · 3 = 27, 27 · 3 = 81</span></li>
+      </ul>
+      <h2>Zweierpotenzen zum Merken</h2>
+      <div class="sqtable">${Array.from({length:10}, (_,i) => `<span>2${SUP(i+1)} = ${Math.pow(2,i+1)}</span>`).join("")}</div>`;
+  INTRO.proz = () => `
+      <p class="lead">Prozent heißt „von hundert“.</p>
+      <p>Stell dir vor, etwas wird in 100 gleich große Teile geteilt. <b>25 %</b> heißt dann: 25 von diesen 100 Teilen.</p>
+      ${percentGrid(25)}
+      <p class="caption">25 von 100 Kästchen = 25 % = ein Viertel</p>
+      <h2>Diese Prozente solltest du kennen</h2>
+      <ul class="tricks">
+        <li><b>100 % ist das Ganze.</b><span class="hand">100 % von 60 = 60</span></li>
+        <li><b>50 % ist die Hälfte.</b><span class="hand">50 % von 80 = 80 : 2 = 40</span></li>
+        <li><b>25 % ist ein Viertel.</b><span class="hand">25 % von 40 = 40 : 4 = 10</span></li>
+        <li><b>10 % ist ein Zehntel.</b><span class="hand">10 % von 70 = 70 : 10 = 7</span></li>
+        <li><b>1 % ist ein Hundertstel.</b><span class="hand">1 % von 500 = 500 : 100 = 5</span></li>
+      </ul>
+      <h2>Der Trick für alle anderen</h2>
+      <p>Rechne erst 10 % oder 1 % aus und nimm das dann mal.</p>
+      <p class="hand">30 % von 90  →  10 % = 9  →  30 % = 3 · 9 = 27</p>`;
+  INTRO.regeln = () => `
+      <p class="lead">Wenn mehrere Rechenarten zusammenkommen, gibt es eine feste Reihenfolge.</p>
+      <ul class="tricks">
+        <li><b>1. Klammern zuerst.</b><span class="hand">(3 + 4) · 5 = 7 · 5 = 35</span></li>
+        <li><b>2. Punkt vor Strich.</b> Mal (·) und geteilt (:) kommen vor plus (+) und minus (−).<span class="hand">3 + 4 · 5 = 3 + 20 = 23</span></li>
+        <li><b>3. Sonst von links nach rechts.</b><span class="hand">20 − 5 + 3 = 15 + 3 = 18</span></li>
+      </ul>
+      <h2>Der häufigste Fehler</h2>
+      <p>Bei <b>3 + 4 · 2</b> rechnen viele erst 3 + 4 = 7 und dann 7 · 2 = 14. Das ist falsch! Richtig ist: erst 4 · 2 = 8, dann 3 + 8 = <b>11</b>.</p>
+      <p>Merksatz: <b>Die Punkte sind stärker als die Striche.</b></p>`;
+
   /* ================= Zustand ================= */
   let view = "home";
   const oldLearn = store.get("learn", null);
@@ -862,6 +1175,7 @@ table.col tr.res td:first-child{border-top:0}
   if(!settings.topic || !(settings.topic === "mix" || TOPICS[settings.topic])) settings.topic = settings.type === "mul" || settings.type === "div" ? settings.type : "mix";
   if(!LEVELS.includes(settings.level)) settings.level = "leicht";
   const curLevel = () => G.forcedLevel || settings.level;
+  const curPracticeTopic = () => G.forcedTopic || settings.topic;
 
   const stats = store.get("stats", {total:0, wrong:0});
   if(typeof stats.total !== "number") stats.total = 0;
@@ -879,7 +1193,7 @@ table.col tr.res td:first-child{border-top:0}
       if(st.stage === "finished") return `${name}: abgeschlossen`;
       return `${name}: Beispiel ${st.idx+1}/10`;
     }
-    return `${doneCount()}/6 Themen geschafft`;
+    return `${doneCount()}/${TOPIC_ORDER.length} Themen geschafft`;
   }
   function saveLearn(){ store.set("learn2", learn); store.set("curTopic", curTopic); track({learnStage: stageLabel()}); }
   S.learnStage = stageLabel();
@@ -921,7 +1235,7 @@ table.col tr.res td:first-child{border-top:0}
   }
   function showAdminLink(on){ document.getElementById("adminlink").hidden = !on; }
   if(adminToken()){
-    adminApi("check").then(() => showAdminLink(true)).catch(e => { if(e.status === 401) setAdminToken(""); });
+    adminApi("check").then(() => { showAdminLink(true); applyOwnerTheme(true); }).catch(e => { if(e.status === 401){ setAdminToken(""); applyOwnerTheme(false); if(view === "home" && S.name) renderHome(); } });
   }
   let brandTaps = [];
   document.querySelector(".brand").addEventListener("click", () => {
@@ -966,6 +1280,138 @@ table.col tr.res td:first-child{border-top:0}
     btn.onclick = submit;
     document.getElementById("oswitch").onclick = () => renderOwnerLogin(isPin ? "code" : "pin");
     inp.focus({preventScroll:true});
+  }
+
+  /* ================= OWNER-MODUS ================= */
+  function applyOwnerTheme(on){
+    document.documentElement.classList.toggle("owner", !!on);
+    const badge = document.getElementById("ownerbadge"); if(badge) badge.hidden = !on;
+    if(on) startStars(); else stopStars();
+  }
+  let starsRaf = 0, starsRun = false;
+  function startStars(){
+    const cv = document.getElementById("stars"); if(!cv || starsRun) return;
+    starsRun = true;
+    const ctx = cv.getContext("2d");
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W = 0, H = 0, stars = [], shoot = null;
+    const resize = () => {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = cv.clientWidth; H = cv.clientHeight;
+      cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+      const n = Math.round(W * H / 9000);
+      stars = Array.from({length:n}, () => ({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.3+.3, p:Math.random()*Math.PI*2, s:.4+Math.random()*1.2, gold:Math.random() < .18}));
+    };
+    resize(); window.addEventListener("resize", resize);
+    const draw = t => {
+      ctx.clearRect(0,0,W,H);
+      for(const st of stars){
+        const a = reduce ? .7 : .35 + .65 * (0.5 + 0.5*Math.sin(st.p + t/1000*st.s));
+        ctx.globalAlpha = a;
+        ctx.fillStyle = st.gold ? "#F5C84C" : "#E8E2FF";
+        ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, Math.PI*2); ctx.fill();
+      }
+      if(!reduce){
+        if(!shoot && Math.random() < .004) shoot = {x:Math.random()*W*.8, y:Math.random()*H*.4, vx:6+Math.random()*4, vy:2+Math.random()*2, life:1};
+        if(shoot){
+          ctx.globalAlpha = shoot.life;
+          const g = ctx.createLinearGradient(shoot.x, shoot.y, shoot.x - shoot.vx*14, shoot.y - shoot.vy*14);
+          g.addColorStop(0, "rgba(255,233,168,1)"); g.addColorStop(1, "rgba(255,233,168,0)");
+          ctx.strokeStyle = g; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(shoot.x, shoot.y); ctx.lineTo(shoot.x - shoot.vx*14, shoot.y - shoot.vy*14); ctx.stroke();
+          shoot.x += shoot.vx; shoot.y += shoot.vy; shoot.life -= .012;
+          if(shoot.life <= 0 || shoot.x > W + 50 || shoot.y > H + 50) shoot = null;
+        }
+      }
+      ctx.globalAlpha = 1;
+      if(!reduce && starsRun) starsRaf = requestAnimationFrame(draw);
+    };
+    starsRaf = requestAnimationFrame(draw);
+    document.addEventListener("visibilitychange", () => {
+      if(!starsRun || reduce) return;
+      cancelAnimationFrame(starsRaf);
+      if(document.visibilityState === "visible") starsRaf = requestAnimationFrame(draw);
+    });
+  }
+  function stopStars(){ starsRun = false; cancelAnimationFrame(starsRaf); }
+
+  const OWNER_ONLINE_MS = 11 * 60 * 1000;
+  async function renderOwnerHome(){
+    track({detail: "Owner-Startseite"});
+    app.innerHTML = `
+      <section class="ohero">
+        <span class="okicker">👑 Owner-Bereich</span>
+        <h1>Willkommen zurück, ${esc(S.name)}.</h1>
+        <p class="lead">Deine Seite, deine Regeln. Hier siehst du auf einen Blick, was gerade los ist, und kannst sofort eingreifen.</p>
+      </section>
+      <div class="statstrip" id="olive">
+        <div class="stat live"><b>…</b><span>gerade online</span></div>
+        <div class="stat"><b>…</b><span>Lernende</span></div>
+        <div class="stat ok"><b>…</b><span>richtig gelöst</span></div>
+        <div class="stat bad"><b>…</b><span>Fehler</span></div>
+      </div>
+      <div class="ogrid">
+        <div class="ocard"><h3>🟢 Gerade online</h3><ul class="olist" id="oonline"><li class="sub">Lädt …</li></ul></div>
+        <div class="ocard"><h3>📢 Schnelle Nachricht</h3>
+          <textarea id="oq" maxlength="500" placeholder="z. B. [rot]**UPDATE IN 5 MIN!**[/rot]"></textarea>
+          <div class="orow">
+            <select id="odur" aria-label="Dauer"><option value="60">1 Minute</option><option value="300" selected>5 Minuten</option><option value="900">15 Minuten</option><option value="3600">1 Stunde</option></select>
+            <button class="btn sm" id="osend">Senden</button>
+          </div>
+          <p class="msg" id="oqmsg" aria-live="polite"></p>
+        </div>
+        <div class="ocard"><h3>⚡ Schnellzugriff</h3>
+          <div class="ostack">
+            <a class="btn sm" href="/admin.html">Admin-Panel öffnen</a>
+            <button class="btn secondary sm" id="omaint">Wartungsmodus …</button>
+            <button class="btn secondary sm" id="oreload">Bei allen neu laden</button>
+          </div>
+          <p class="msg" id="oamsg" aria-live="polite"></p>
+        </div>
+      </div>
+      <h2>Themen</h2>
+      ${topicGrid()}`;
+    bindTopicGrid();
+    const flashO = (id, t, ok) => { const el = document.getElementById(id); if(!el) return; el.className = "msg " + (ok ? "ok" : "bad"); el.textContent = t; };
+    let cfg = {};
+    const load = async () => {
+      try{
+        const r = await adminApi("list");
+        if(view !== "home") return;
+        cfg = r.config || {};
+        const now = r.now || Date.now(), L2 = r.learners || [];
+        const online = L2.filter(l => l.online && now - (l.lastSeen || 0) < OWNER_ONLINE_MS);
+        const ok = L2.reduce((a,l) => a + (l.correct||0), 0), bad = L2.reduce((a,l) => a + (l.wrong||0), 0);
+        const b = document.querySelectorAll("#olive b");
+        if(b.length === 4){ b[0].textContent = online.length; b[1].textContent = L2.length; b[2].textContent = ok; b[3].textContent = bad; }
+        const ul = document.getElementById("oonline");
+        if(ul) ul.innerHTML = online.length
+          ? online.map(l => `<li><span class="dotl" aria-hidden="true"></span><div style="min-width:0"><b>${esc(l.name)}</b><div class="sub">${esc(l.detail || "")}</div></div></li>`).join("")
+          : `<li class="sub">Gerade ist niemand online.</li>`;
+        const mb = document.getElementById("omaint");
+        if(mb) mb.textContent = cfg.maintenance && cfg.maintenance.on ? "Wartungsmodus ausschalten" : "Wartungsmodus einschalten";
+      }catch(e){
+        if(e.status === 401){ setAdminToken(""); applyOwnerTheme(false); showAdminLink(false); renderHome(); }
+      }
+    };
+    document.getElementById("osend").onclick = async () => {
+      const text = document.getElementById("oq").value.trim();
+      if(!text){ flashO("oqmsg", "Schreib zuerst eine Nachricht.", false); return; }
+      try{ await adminApi("broadcast", { text, seconds: Number(document.getElementById("odur").value), style:"banner" }); document.getElementById("oq").value = ""; flashO("oqmsg", "Gesendet! Alle sehen sie gleich.", true); }
+      catch(e){ flashO("oqmsg", e.message, false); }
+    };
+    document.getElementById("omaint").onclick = async () => {
+      const on = !(cfg.maintenance && cfg.maintenance.on);
+      try{ await adminApi("maintenance", { on, text: (cfg.maintenance && cfg.maintenance.text) || "" }); flashO("oamsg", on ? "Wartungsmodus ist an." : "Wartungsmodus ist aus.", true); load(); }
+      catch(e){ flashO("oamsg", e.message, false); }
+    };
+    document.getElementById("oreload").onclick = async () => {
+      if(!confirm("Bei allen, die gerade auf der Seite sind, wird sie gleich neu geladen. Weiter?")) return;
+      try{ await adminApi("reloadAll"); flashO("oamsg", "Alle Seiten werden neu geladen.", true); }
+      catch(e){ flashO("oamsg", e.message, false); }
+    };
+    load();
+    clearInterval(renderOwnerHome._t);
+    renderOwnerHome._t = setInterval(() => { if(view === "home" && document.visibilityState === "visible") load(); else if(view !== "home") clearInterval(renderOwnerHome._t); }, 30000);
   }
 
   /* ================= Namensabfrage ================= */
@@ -1016,6 +1462,7 @@ table.col tr.res td:first-child{border-top:0}
     app.querySelectorAll("[data-practice]").forEach(b => b.onclick = () => { settings.topic = b.dataset.practice; store.set("settings", settings); go("practice"); });
   }
   function renderHome(){
+    if(adminToken()){ renderOwnerHome(); return; }
     track({detail: "Startseite"});
     const tot = stats.total + stats.wrong;
     const quote = tot ? Math.round(stats.total / tot * 100) + " %" : "–";
@@ -1033,7 +1480,7 @@ table.col tr.res td:first-child{border-top:0}
         <div class="stat ok"><b>${stats.total}</b><span>richtig gelöst</span></div>
         <div class="stat bad"><b>${stats.wrong}</b><span>Fehler</span></div>
         <div class="stat"><b>${quote}</b><span>Trefferquote</span></div>
-        <div class="stat"><b>${doneCount()}/6</b><span>Themen geschafft</span></div>
+        <div class="stat"><b>${doneCount()}/${TOPIC_ORDER.length}</b><span>Themen geschafft</span></div>
       </div>
       <h2>Themen</h2>
       ${topicGrid()}`;
@@ -1107,7 +1554,8 @@ table.col tr.res td:first-child{border-top:0}
   function makeTask(){
     let t, key, guard = 0;
     do{
-      const topic = settings.topic === "mix" ? pick(TOPIC_ORDER) : settings.topic;
+      const sel = curPracticeTopic();
+      const topic = sel === "mix" ? pick(TOPIC_ORDER) : sel;
       t = TOPICS[topic].gen(curLevel());
       key = taskLabel(t);
     } while(key === lastKey && ++guard < 20);
@@ -1117,7 +1565,7 @@ table.col tr.res td:first-child{border-top:0}
   function newTask(){ P = {task:makeTask(), solved:false, locked:false, tries:0}; renderTask(); }
 
   function renderPractice(){
-    const forced = G.forcedLevel;
+    const forced = G.forcedLevel, fTopic = G.forcedTopic;
     const chip = (group, val, label, on, dis) => `<button data-${group}="${val}" aria-pressed="${on}"${dis ? " disabled" : ""}>${label}</button>`;
     app.innerHTML = `
       <h1>Üben</h1>
@@ -1126,8 +1574,9 @@ table.col tr.res td:first-child{border-top:0}
         <div>
           <span class="ctl-label" id="typ-l">Thema</span>
           <div class="seg" role="group" aria-labelledby="typ-l">
-            ${chip("topic","mix","Gemischt", settings.topic === "mix")}${TOPIC_ORDER.map(k => chip("topic", k, `${TOPICS[k].icon} ${TOPICS[k].name}`, settings.topic === k)).join("")}
+            ${chip("topic","mix","Gemischt", curPracticeTopic() === "mix", fTopic && fTopic !== "mix")}${TOPIC_ORDER.map(k => chip("topic", k, `${TOPICS[k].icon} ${TOPICS[k].name}`, curPracticeTopic() === k, fTopic && fTopic !== k)).join("")}
           </div>
+          ${fTopic ? `<p class="forced">Das Thema ist gerade auf „${fTopic === "mix" ? "Gemischt" : TOPICS[fTopic].name}“ festgelegt.</p>` : ""}
         </div>
         <div>
           <span class="ctl-label" id="lvl-l">Schwierigkeit</span>
@@ -1140,7 +1589,7 @@ table.col tr.res td:first-child{border-top:0}
       <div class="badges" id="badges"></div>
       <div id="taskarea"></div>`;
     app.querySelectorAll("[data-level]").forEach(b => b.onclick = () => { if(G.forcedLevel) return; settings.level = b.dataset.level; store.set("settings", settings); renderPractice(); });
-    app.querySelectorAll("[data-topic]").forEach(b => b.onclick = () => { settings.topic = b.dataset.topic; store.set("settings", settings); renderPractice(); });
+    app.querySelectorAll("[data-topic]").forEach(b => b.onclick = () => { if(G.forcedTopic) return; settings.topic = b.dataset.topic; store.set("settings", settings); renderPractice(); });
     newTask();
   }
   function updateStats(){
@@ -1210,7 +1659,7 @@ table.col tr.res td:first-child{border-top:0}
     const r = readAnswer(t);
     if(r.empty){ msg.className = "msg"; msg.textContent = "Tippe zuerst dein Ergebnis ein."; inputs[0].focus(); return; }
     if(r.zero){ msg.className = "msg bad"; msg.textContent = "Unten darf keine 0 stehen."; inputs[1].focus(); return; }
-    const attempt = {t: taskLabel(t).slice(0,20), a: String(r.given).slice(0,12), ok: r.ok, at: Date.now()};
+    const attempt = {t: taskLabel(t).slice(0,30), a: String(r.given).slice(0,12), ok: r.ok, at: Date.now()};
     if(r.ok){
       P.solved = true;
       if(P.tries === 0){ streak++; if(streak > stats.best) stats.best = streak; }
@@ -1265,7 +1714,7 @@ table.col tr.res td:first-child{border-top:0}
     const bg = document.createElement("div");
     bg.className = "modal-bg"; bg.id = "modal-bg";
     bg.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-t">
-      <h2 id="modal-t">${esc(m.title || "Nachricht")}</h2>
+      <h2 id="modal-t">${m.titleHTML || esc(m.title || "Nachricht")}</h2>
       <div class="m-body">${m.html}</div>
       <div class="actions" style="margin-top:20px"><button class="btn" id="modal-ok">OK</button></div></div>`;
     document.body.appendChild(bg);
@@ -1285,7 +1734,7 @@ table.col tr.res td:first-child{border-top:0}
     clearTimeout(bcTimer);
     bcTimer = setTimeout(hideBanner, Math.min(2147000000, Math.max(1000, b.until - serverNow)));
     const el = document.getElementById("bc");
-    el.innerHTML = `<div class="bc-inner bc-in"><span class="bc-icon" aria-hidden="true">📢</span><div class="bc-text">${renderMarkup(b.text)}</div><button class="bc-x" aria-label="Nachricht schließen">×</button></div>`;
+    el.innerHTML = `<div class="bc-inner bc-in"><span class="bc-icon" aria-hidden="true">📢</span><div class="bc-text"><strong class="ownertag">OWNER:</strong>${renderMarkup(b.text)}</div><button class="bc-x" aria-label="Nachricht schließen">×</button></div>`;
     el.hidden = false;
     el.querySelector(".bc-x").onclick = () => { store.set("bcDismissed", b.id); hideBanner(); };
   }
@@ -1297,19 +1746,25 @@ table.col tr.res td:first-child{border-top:0}
     el.innerHTML = `<div class="o-box"><div class="o-icon" aria-hidden="true">${o.icon}</div><h1>${esc(o.title)}</h1><div class="lead">${o.html}</div></div>`;
   }
 
+  function resetStats(){
+    stats.total = 0; stats.wrong = 0; stats.best = 0; store.set("stats", stats);
+    streak = 0; S.last = []; store.set("last", []);
+    track({correct:0, wrong:0, streak:0});
+    if(view === "practice") updateStats();
+    if(view === "home") renderHome();
+    openModal({ title:"Neustart", html:"Deine Statistik wurde zurückgesetzt. Auf ein Neues!" });
+  }
   function runCmd(c){
     const done = store.get("cmdDone", []);
     if(done.includes(c.id)) return;
     done.push(c.id); store.set("cmdDone", done.slice(-40));
     if(c.type === "msg"){
-      openModal({ title:"Nachricht für dich", html: renderMarkup(c.text) });
+      openModal({ titleHTML:`Nachricht vom <span class="ownertag">OWNER</span>`, html: renderMarkup(c.text) });
     } else if(c.type === "reset"){
-      stats.total = 0; stats.wrong = 0; stats.best = 0; store.set("stats", stats);
-      streak = 0; S.last = []; store.set("last", []);
-      track({correct:0, wrong:0, streak:0});
-      if(view === "practice") updateStats();
-      if(view === "home") renderHome();
-      openModal({ title:"Neustart", html:"Deine Statistik wurde zurückgesetzt. Auf ein Neues!" });
+      resetStats();
+    } else if(c.type === "setname"){
+      const n = String(c.text || "").trim().slice(0, 30);
+      if(n){ S.name = n; store.set("name", n); track({}); if(view === "home") renderHome(); }
     } else if(c.type === "rename"){
       S.name = ""; store.set("name", "");
       go(view);
@@ -1332,9 +1787,16 @@ table.col tr.res td:first-child{border-top:0}
     note.hidden = !(owner && st.maintenance);
     note.textContent = owner && st.maintenance ? "Wartungsmodus ist an. Nur du siehst die Seite normal." : "";
 
-    const before = G.forcedLevel;
+    const before = G.forcedLevel + "|" + G.forcedTopic;
     G.forcedLevel = LEVELS.includes(st.forcedLevel) ? st.forcedLevel : null;
-    if(before !== G.forcedLevel && view === "practice" && S.name) renderPractice();
+    G.forcedTopic = st.forcedTopic === "mix" || TOPICS[st.forcedTopic] ? st.forcedTopic : null;
+    if(before !== G.forcedLevel + "|" + G.forcedTopic && view === "practice" && S.name) renderPractice();
+
+    if(st.resetAt){
+      const seen = store.get("resetSeen", null);
+      if(seen === null) store.set("resetSeen", st.resetAt);
+      else if(st.resetAt > seen){ store.set("resetSeen", st.resetAt); if(!owner) resetStats(); }
+    }
 
     showBroadcast(st.broadcast, st.now || Date.now());
     (st.cmds || []).forEach(runCmd);
