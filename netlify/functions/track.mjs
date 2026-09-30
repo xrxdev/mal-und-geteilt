@@ -30,7 +30,7 @@ export default async (req) => {
     const at = Math.floor(Number(x && x.at));
     return {
       t: str(x && x.t, 20),
-      a: str(x && x.a, 6),
+      a: str(x && x.a, 12),
       ok: !!(x && x.ok),
       at: Number.isFinite(at) && at > 0 && at < now + 60000 ? at : now
     };
@@ -50,7 +50,10 @@ export default async (req) => {
     last,
     online: !!data.online,
     lastSeen: now,
-    firstSeen: (old && old.firstSeen) || now
+    firstSeen: (old && old.firstSeen) || now,
+    // vom Admin gesetzt, bleibt erhalten
+    banned: !!(old && old.banned),
+    cmds: (old && old.cmds) || []
   };
 
   await store.setJSON(id, record);
