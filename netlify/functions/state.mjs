@@ -17,6 +17,8 @@ export default async (req) => {
     broadcast: cfg.broadcast && cfg.broadcast.until > now ? cfg.broadcast : null,
     maintenance: cfg.maintenance && cfg.maintenance.on ? { text: cfg.maintenance.text || "" } : null,
     forcedLevel: cfg.forcedLevel || null,
+    forcedTopic: cfg.forcedTopic || null,
+    resetAt: cfg.resetAt || 0,
     reloadAt: cfg.reloadAt || 0,
     banned: false,
     cmds: []

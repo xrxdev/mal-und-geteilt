@@ -94,6 +94,7 @@ export default async (req) => {
   const learnersStore = getStore({ name: "learners", consistency: "strong" });
   const validId = id => /^[a-f0-9]{16,64}$/.test(String(id || ""));
   const LEVELS = ["sehrleicht", "leicht", "mittel", "schwer", "sehrschwer", "extrem"];
+  const TOPICS = ["mix", "plus", "minus", "mul", "div", "frac", "root", "pot", "proz", "regeln"];
 
   if (action === "broadcast") {
     const text = str(body.text, 500).trim();
@@ -106,6 +107,7 @@ export default async (req) => {
       sent: now,
       until: now + secs * 1000
     };
+    cfg.history = [{ text, sent: now, seconds: secs }, ...(cfg.history || [])].slice(0, 10);
     await saveCfg();
     return json({ ok: true, broadcast: cfg.broadcast });
   }
@@ -128,6 +130,34 @@ export default async (req) => {
     return json({ ok: true });
   }
 
+  if (action === "forceTopic") {
+    cfg.forcedTopic = TOPICS.includes(body.topic) ? body.topic : null;
+    await saveCfg();
+    return json({ ok: true });
+  }
+
+  if (action === "resetAll") {
+    cfg.resetAt = now;
+    await saveCfg();
+    const { blobs } = await learnersStore.list();
+    await Promise.all(blobs.map(async b => {
+      const rec = await learnersStore.get(b.key, { type: "json" });
+      if (!rec) return;
+      rec.correct = 0; rec.wrong = 0; rec.streak = 0; rec.last = [];
+      await learnersStore.setJSON(b.key, rec);
+    }));
+    return json({ ok: true });
+  }
+
+  if (action === "note") {
+    if (!validId(body.id)) return json({ error: "Ungültige ID" }, 400);
+    const rec = await learnersStore.get(body.id, { type: "json" });
+    if (!rec) return json({ error: "Person nicht gefunden" }, 404);
+    rec.note = str(body.text, 300);
+    await learnersStore.setJSON(body.id, rec);
+    return json({ ok: true });
+  }
+
   if (action === "reloadAll") {
     cfg.reloadAt = now;
     await saveCfg();
@@ -142,8 +172,9 @@ export default async (req) => {
       rec.banned = !!body.banned;
     } else {
       const type = String(body.type || "");
-      if (!["msg", "reset", "rename", "reload"].includes(type)) return json({ error: "Unbekannter Befehl" }, 400);
-      if (type === "msg" && !str(body.text, 500).trim()) return json({ error: "Die Nachricht ist leer." }, 400);
+      if (!["msg", "reset", "rename", "reload", "setname"].includes(type)) return json({ error: "Unbekannter Befehl" }, 400);
+      if ((type === "msg" || type === "setname") && !str(body.text, 500).trim()) return json({ error: "Der Text ist leer." }, 400);
+      if (type === "setname") rec.name = str(body.text, 30).trim();
       const cmd = { id: randomBytes(6).toString("hex"), type, text: str(body.text, 500), at: now };
       rec.cmds = [...(rec.cmds || []).filter(c => now - c.at < 60 * 60 * 1000), cmd].slice(-10);
       if (type === "reset") { rec.correct = 0; rec.wrong = 0; rec.streak = 0; rec.last = []; }
