@@ -456,6 +456,13 @@ async function startDashboard(){
       </section>
     </div>
 
+    <section class="card" aria-labelledby="help-h">
+      <h2 id="help-h">🔍 Rechenweg angezeigt</h2>
+      <p class="muted small" style="margin-top:-4px">Wer sich beim Üben den Rechenweg hat anzeigen lassen, bei welcher Aufgabe und wann. Der Knopf erscheint erst nach einer falschen Antwort.</p>
+      <div id="helpstats"></div>
+      <ul class="feed" id="helpfeed" style="margin-top:12px"></ul>
+    </section>
+
     <div class="row" style="justify-content:space-between;margin-top:26px">
       <h2 style="margin:0">Lernende</h2>
       <input class="inp search" id="search" type="search" placeholder="Name suchen …" aria-label="Name suchen">
@@ -691,13 +698,33 @@ function ago(t){
   return new Date(t).toLocaleDateString("de-DE");
 }
 const clock = t => new Date(t).toLocaleString("de-DE", {day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit"});
+const dateTime = t => new Date(t).toLocaleString("de-DE", {weekday:"short", day:"2-digit", month:"2-digit", year:"numeric", hour:"2-digit", minute:"2-digit"}) + " Uhr";
+
+function renderHelp(all){
+  const box = document.getElementById("helpstats"), feed = document.getElementById("helpfeed");
+  if(!box || !feed) return;
+  const users = all.filter(l => (l.helps||0) > 0).sort((a,b) => (b.helps||0) - (a.helps||0));
+  box.innerHTML = users.length
+    ? `<table class="lb"><thead><tr><th>Name</th><th class="r">Rechenweg</th><th class="r">Pro Aufgabe</th><th>Zuletzt</th></tr></thead><tbody>${users.map(l => {
+        const done = (l.correct||0);
+        const ratio = done ? Math.round((l.helps||0) / done * 100) + " %" : "–";
+        const lastH = (l.helpLog || []).reduce((m,h) => Math.max(m, h.at||0), 0);
+        return `<tr><td><b>${esc(l.name)}</b></td><td class="r">🔍 ${l.helps}</td><td class="r" title="Rechenweg angezeigt im Verhältnis zu gelösten Aufgaben">${ratio}</td><td>${lastH ? dateTime(lastH) : "–"}</td></tr>`;
+      }).join("")}</tbody></table>`
+    : `<p class="muted">Bisher hat sich noch niemand den Rechenweg anzeigen lassen.</p>`;
+  const items = [];
+  for(const l of all) for(const h of (l.helpLog || [])) items.push({name:l.name, ...h});
+  items.sort((a,b) => (b.at||0) - (a.at||0));
+  feed.innerHTML = items.slice(0, 40).map(h =>
+    `<li><span class="fk">🔍</span><span><b>${esc(h.name)}</b>: ${esc(h.t)} <span class="muted small">(${esc(h.k)}, ${esc(h.l)})</span></span><span class="muted small">${dateTime(h.at)}</span></li>`).join("");
+}
 
 function exportCsv(){
   const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
-  const rows = [["Name","Status","Gerade bei","Lernteil","Schwierigkeit","Richtig","Fehler","Quote","Zuletzt aktiv","Dabei seit","Gesperrt"]];
+  const rows = [["Name","Status","Gerade bei","Lernteil","Schwierigkeit","Richtig","Fehler","Quote","Rechenweg angezeigt","Zuletzt aktiv","Dabei seit","Gesperrt"]];
   for(const l of learners){
     const c = l.correct||0, w = l.wrong||0;
-    rows.push([l.name, statusOf(l).text, l.detail, l.learnStage, l.level, c, w, c+w ? Math.round(c/(c+w)*100)+" %" : "",
+    rows.push([l.name, statusOf(l).text, l.detail, l.learnStage, l.level, c, w, c+w ? Math.round(c/(c+w)*100)+" %" : "", l.helps || 0,
       l.lastSeen ? clock(l.lastSeen) : "", l.firstSeen ? clock(l.firstSeen) : "", l.banned ? "ja" : "nein"]);
   }
   const csv = "\ufeff" + rows.map(r => r.map(q).join(";")).join("\r\n");
@@ -740,9 +767,10 @@ function renderData(){
     <div class="sum"><b>${all.length}</b><span>Lernende insgesamt</span></div>
     <div class="sum"><b>${sumOk}</b><span>Aufgaben richtig</span></div>
     <div class="sum wrong"><b>${sumBad}</b><span>Fehler insgesamt</span></div>
-    <div class="sum"><b>${quote}</b><span>Trefferquote</span></div>`;
+    <div class="sum"><b>${quote}</b><span>Trefferquote</span></div>
+    <div class="sum"><b>${all.reduce((s,r) => s + (r.helps||0), 0)}</b><span>Rechenweg angezeigt</span></div>`;
 
-  renderLeader(all); renderFeed(all);
+  renderLeader(all); renderFeed(all); renderHelp(all);
   const rows = search ? all.filter(r => String(r.name).toLowerCase().includes(search)) : all;
   const table = document.getElementById("table");
   if(!all.length){
@@ -756,7 +784,7 @@ function renderData(){
 
   let html = `<table><thead><tr>
     <th>Status</th><th>Name</th><th>Gerade bei</th><th>Lernteil</th>
-    <th style="text-align:right">Richtig</th><th style="text-align:right">Fehler</th><th style="text-align:right">Quote</th><th>Zuletzt aktiv</th>
+    <th style="text-align:right">Richtig</th><th style="text-align:right">Fehler</th><th style="text-align:right">Quote</th><th style="text-align:right">Rechenweg</th><th>Zuletzt aktiv</th>
   </tr></thead><tbody>`;
   for(const r of rows){
     const c = r.correct||0, w = r.wrong||0;
@@ -770,16 +798,20 @@ function renderData(){
       <td class="num oknum">${c}</td>
       <td class="num wrongnum">${w}</td>
       <td class="num">${q}</td>
+      <td class="num" title="So oft den Rechenweg angezeigt">${r.helps ? `🔍 ${r.helps}` : "–"}</td>
       <td>${ago(r.lastSeen)}</td>
     </tr>`;
     if(openId === r.id){
       const last = (r.last || []).slice().reverse();
-      html += `<tr class="details"><td colspan="8">
+      html += `<tr class="details"><td colspan="9">
         <b>Letzte Versuche</b> <span class="muted">(neueste zuerst)</span>
         <div class="attempts">${last.length ? last.map(a =>
           `<span class="att ${a.ok ? "ok" : "bad"}" title="${esc(clock(a.at))}">${esc(a.t)} = ${esc(a.a)} ${a.ok ? "✓" : "✗"}</span>`).join("") : `<span class="muted">Noch keine Aufgaben gerechnet.</span>`}</div>
         <p class="muted">Schwierigkeit: ${esc(r.level || "–")}. Ohne Fehler hintereinander: ${r.streak||0}. Dabei seit: ${r.firstSeen ? clock(r.firstSeen) : "–"}.</p>
         ${r.note ? `<div class="note">📝 ${esc(r.note)}</div>` : ""}
+        <b>Rechenweg angezeigt</b> <span class="muted">(${r.helps || 0}-mal insgesamt${(r.helpLog||[]).length ? ", die letzten zuerst" : ""})</span>
+        ${(r.helpLog || []).length ? `<ul class="feed" style="margin:8px 0 12px;max-height:220px">${r.helpLog.slice().reverse().map(h =>
+          `<li><span class="fk">🔍</span><span>${esc(h.t)} <span class="muted small">(${esc(h.k)}, ${esc(h.l)})</span></span><span class="muted small">${dateTime(h.at)}</span></li>`).join("")}</ul>` : `<p class="muted">Noch nie.</p>`}
         <div class="btnrow">
           <button class="btn sm" data-act="msg">Nachricht senden</button>
           <button class="btn secondary sm" data-act="reset">Statistik zurücksetzen</button>

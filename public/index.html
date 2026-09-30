@@ -1185,6 +1185,7 @@ html.owner .steps>li::before{background:#1A1230;box-shadow:0 0 12px rgba(245,200
   let streak = 0;
   let P = null, lastKey = "";
   S.correct = stats.total; S.wrong = stats.wrong;
+  S.helps = stats.helps || 0; S.helpLog = store.get("helpLog", []);
 
   function doneCount(){ return TOPIC_ORDER.filter(k => learn[k] && learn[k].done).length; }
   function stageLabel(){
@@ -1443,7 +1444,7 @@ html.owner .steps>li::before{background:#1A1230;box-shadow:0 0 12px rgba(245,200
         <p class="msg bad" id="nmmsg" aria-live="polite"></p>
       </div>
       <div class="actions"><button class="btn" id="nmok">Los geht's</button></div>
-      <p class="muted small">Gut zu wissen: Dein Name und dein Lernfortschritt werden gespeichert, also bei welcher Aufgabe du bist, was richtig und was falsch war und wann du zuletzt da warst. Das sieht nur der Ersteller dieser Seite, damit er sieht, wie gut das Lernen klappt.</p>`;
+      <p class="muted small">Gut zu wissen: Dein Name und dein Lernfortschritt werden gespeichert, also bei welcher Aufgabe du bist, was richtig und was falsch war, wann du dir den Rechenweg angezeigt hast und wann du zuletzt da warst. Das sieht nur der Ersteller dieser Seite, damit er sieht, wie gut das Lernen klappt.</p>`;
     const inp = document.getElementById("nm");
     const ok = () => {
       const n = inp.value.trim().replace(/\s+/g, " ").slice(0, 30);
@@ -1648,6 +1649,12 @@ html.owner .steps>li::before{background:#1A1230;box-shadow:0 0 12px rgba(245,200
   }
   function showHelp(){
     const t = P.task;
+    // Mitzählen, dass der Rechenweg angeschaut wurde (sieht der Owner im Admin-Panel)
+    stats.helps = (stats.helps || 0) + 1; store.set("stats", stats);
+    const log = store.get("helpLog", []);
+    log.push({t: taskLabel(t).slice(0,30), k: TOPICS[t.topic].name, l: LEVEL_NAMES[curLevel()], at: Date.now()});
+    S.helpLog = log.slice(-30); store.set("helpLog", S.helpLog);
+    track({helps: stats.helps});
     const box = document.getElementById("helpbox");
     box.innerHTML = `<h2>So rechnest du die Aufgabe</h2>${stepsHTML(TOPICS[t.topic].steps(t))}`;
     document.getElementById("help").hidden = true;
@@ -1765,9 +1772,9 @@ html.owner .steps>li::before{background:#1A1230;box-shadow:0 0 12px rgba(245,200
   }
 
   function resetStats(){
-    stats.total = 0; stats.wrong = 0; stats.best = 0; store.set("stats", stats);
-    streak = 0; S.last = []; store.set("last", []);
-    track({correct:0, wrong:0, streak:0});
+    stats.total = 0; stats.wrong = 0; stats.best = 0; stats.helps = 0; store.set("stats", stats);
+    streak = 0; S.last = []; store.set("last", []); S.helpLog = []; store.set("helpLog", []);
+    track({correct:0, wrong:0, streak:0, helps:0});
     if(view === "practice") updateStats();
     if(view === "home") renderHome();
     openModal({ title:"Neustart", html:"Deine Statistik wurde zurückgesetzt. Auf ein Neues!" });
@@ -1860,7 +1867,8 @@ html.owner .steps>li::before{background:#1A1230;box-shadow:0 0 12px rgba(245,200
     if(!S || !S.name) return null;
     return JSON.stringify({ id, secret, data: {
       name: S.name, view: S.view, detail: S.detail, level: S.level, learnStage: S.learnStage,
-      correct: S.correct, wrong: S.wrong, streak: S.streak, last: S.last, online: !!online
+      correct: S.correct, wrong: S.wrong, streak: S.streak, last: S.last, online: !!online,
+      helps: S.helps || 0, helpLog: S.helpLog || []
     }});
   }
   function push(online){
