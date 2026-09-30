@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<script>try{if(localStorage.getItem("mg_owner_theme")!=="off")document.documentElement.classList.add("owner")}catch(e){}</script>
 <style>
 :root{
   --paper:#FAFCFF; --grid:#DCE7F6; --line:#C9D6EA;
@@ -134,9 +135,57 @@ textarea:focus-visible,.inp:focus-visible,select:focus-visible{outline:3px solid
 .btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .btn.sm{min-height:40px;padding:6px 14px;font-size:.95rem}
 .banned td{opacity:.6}
+
+/* ================= OWNER-ANSICHT (wie auf der Lernseite) ================= */
+.aurora,#stars{display:none}
+html.owner{
+  --paper:#0A0714; --grid:rgba(160,120,255,.07); --grid-major:rgba(245,200,76,.11); --line:rgba(245,200,76,.26);
+  --ink:#F5C84C; --ink-soft:rgba(245,200,76,.12); --on-ink:#1A1204;
+  --text:#F4F1FF; --muted:#B9B0D6;
+  --ok:#5BE3A0; --ok-soft:rgba(91,227,160,.12); --bad:#FF6B7A; --bad-soft:rgba(255,107,122,.14);
+  --warn:#F5C84C; --off:#8C84A8;
+  --m-rot:#FF6B6F; --m-orange:#FFA34D; --m-gelb:#FFD34D; --m-gruen:#5BD69A; --m-blau:#7DAAFF; --m-lila:#C4A6FF; --m-pink:#FF7EB8;
+  --m-dunkelrot:#E0525A; --m-gold:#F5C84C; --m-dunkelgruen:#3FAF6E; --m-tuerkis:#4FD6D6; --m-dunkelblau:#8BA0FF; --m-braun:#D9A574; --m-grau:#B9B0D6;
+  color-scheme:dark;
+}
+html.owner body{background-color:var(--paper)}
+html.owner .aurora{display:block;position:fixed;inset:-25%;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(38% 32% at 18% 22%, rgba(168,85,247,.36), transparent 70%),
+    radial-gradient(34% 30% at 82% 18%, rgba(245,200,76,.22), transparent 70%),
+    radial-gradient(42% 38% at 65% 88%, rgba(56,189,248,.22), transparent 70%),
+    radial-gradient(30% 28% at 30% 80%, rgba(236,72,153,.16), transparent 70%);
+  filter:blur(24px);animation:aur 24s ease-in-out infinite alternate}
+@keyframes aur{0%{transform:translate(0,0) rotate(0deg) scale(1)}50%{transform:translate(4%,-3%) rotate(10deg) scale(1.06)}100%{transform:translate(-4%,3%) rotate(-8deg) scale(1)}}
+html.owner #stars{display:block;position:fixed;inset:0;z-index:0;pointer-events:none;width:100%;height:100%}
+.wrap{position:relative;z-index:1}
+html.owner h1{background:linear-gradient(90deg,#FFE9A8 0%,#F5C84C 35%,#E0A6FF 75%,#8BD3FF 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+html.owner h2{color:#F5C84C}
+html.owner .bar{border-bottom-color:rgba(245,200,76,.45)}
+html.owner .btn{background:linear-gradient(135deg,#FFE08A,#F5C84C 45%,#D99A1E);border-color:#F5C84C;color:#1A1204;box-shadow:0 0 0 1px rgba(255,224,138,.3),0 8px 24px rgba(245,200,76,.25)}
+html.owner .btn:hover{filter:brightness(1.1)}
+html.owner .btn.secondary{background:rgba(245,200,76,.06);color:#F5C84C;box-shadow:none}
+html.owner .btn.danger{background:rgba(255,107,122,.08);color:var(--bad);border-color:var(--bad);box-shadow:none}
+html.owner .card,html.owner .sum,html.owner .tablewrap,html.owner .panel,html.owner .preview,html.owner .hist li{background:rgba(22,15,40,.62);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-color:var(--line)}
+html.owner .card{box-shadow:0 0 0 1px rgba(245,200,76,.05),0 14px 44px rgba(0,0,0,.5)}
+html.owner .sum{border-left-color:#F5C84C}
+html.owner .sum.online{border-left-color:var(--ok)} html.owner .sum.online b{text-shadow:0 0 16px rgba(91,227,160,.6)}
+html.owner .sum.wrong{border-left-color:var(--bad)}
+html.owner th{background:rgba(245,200,76,.1);color:#E8D9A6}
+html.owner tr.item:hover td{background:rgba(245,200,76,.07)}
+html.owner .details td{background:rgba(245,200,76,.05)}
+html.owner textarea,html.owner .inp,html.owner select{background:rgba(0,0,0,.28);border-color:var(--line);color:var(--text)}
+html.owner .tpl,html.owner .tb{background:rgba(245,200,76,.05);border-color:var(--line);color:var(--text)}
+html.owner .tb.sw{border-color:#0A0714}
+html.owner .active{background:rgba(91,227,160,.1)}
+html.owner .feed li{background:rgba(245,200,76,.07)}
+html.owner .status.on i{box-shadow:0 0 10px var(--ok),0 0 0 4px var(--ok-soft)}
+@media (prefers-reduced-motion: reduce){html.owner .aurora{animation:none}}
 </style>
 </head>
 <body>
+<div class="aurora" aria-hidden="true"></div>
+<canvas id="stars" aria-hidden="true"></canvas>
 <div class="wrap" id="app"><p class="muted">Lädt …</p></div>
 
 <script>
@@ -183,11 +232,73 @@ async function api(action, extra){
   return data;
 }
 
+  /* ---------- Sternenhimmel (nur Owner-Ansicht) ---------- */
+  const Stars = (() => {
+    let cv, ctx, W = 0, H = 0, list = [], shoot = null, raf = 0, running = false, inited = false;
+    const reduce = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function resize(){
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = cv.clientWidth; H = cv.clientHeight;
+      cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+      const n = Math.round(W * H / 9000);
+      list = Array.from({length:n}, () => ({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.3+.3, p:Math.random()*Math.PI*2, s:.4+Math.random()*1.2, gold:Math.random() < .18}));
+      if(running && reduce()) draw(0);
+    }
+    function draw(t){
+      ctx.clearRect(0,0,W,H);
+      const still = reduce();
+      for(const st of list){
+        ctx.globalAlpha = still ? .7 : .35 + .65 * (0.5 + 0.5*Math.sin(st.p + t/1000*st.s));
+        ctx.fillStyle = st.gold ? "#F5C84C" : "#E8E2FF";
+        ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, Math.PI*2); ctx.fill();
+      }
+      if(!still){
+        if(!shoot && Math.random() < .004) shoot = {x:Math.random()*W*.8, y:Math.random()*H*.4, vx:6+Math.random()*4, vy:2+Math.random()*2, life:1};
+        if(shoot){
+          ctx.globalAlpha = shoot.life;
+          const g = ctx.createLinearGradient(shoot.x, shoot.y, shoot.x - shoot.vx*14, shoot.y - shoot.vy*14);
+          g.addColorStop(0, "rgba(255,233,168,1)"); g.addColorStop(1, "rgba(255,233,168,0)");
+          ctx.strokeStyle = g; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(shoot.x, shoot.y); ctx.lineTo(shoot.x - shoot.vx*14, shoot.y - shoot.vy*14); ctx.stroke();
+          shoot.x += shoot.vx; shoot.y += shoot.vy; shoot.life -= .012;
+          if(shoot.life <= 0 || shoot.x > W + 50 || shoot.y > H + 50) shoot = null;
+        }
+      }
+      ctx.globalAlpha = 1;
+      if(running && !still && document.visibilityState === "visible") raf = requestAnimationFrame(draw);
+    }
+    function start(){
+      cv = cv || document.getElementById("stars"); if(!cv) return;
+      if(!inited){
+        try{ ctx = cv.getContext("2d"); }catch(e){ ctx = null; }
+        if(!ctx) return;   // ohne Canvas einfach keine Sterne
+        inited = true;
+        window.addEventListener("resize", () => { if(running) resize(); });
+        document.addEventListener("visibilitychange", () => { if(running && document.visibilityState === "visible" && !reduce()){ cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); } });
+      }
+      if(running) return;
+      running = true; resize(); cancelAnimationFrame(raf); raf = requestAnimationFrame(draw);
+    }
+    function stop(){ running = false; cancelAnimationFrame(raf); if(ctx) ctx.clearRect(0,0,W,H); }
+    return { start, stop };
+  })();
+  // Owner kann zwischen Owner-Ansicht und normaler Ansicht umschalten (nur in diesem Browser)
+  const ownerViewPref = () => { try{ return localStorage.getItem("mg_owner_theme") !== "off"; }catch(e){ return true; } };
+  function setOwnerViewPref(on){ try{ on ? localStorage.removeItem("mg_owner_theme") : localStorage.setItem("mg_owner_theme", "off"); }catch(e){} }
+
+function applyView(){
+  const on = ownerViewPref();
+  document.documentElement.classList.toggle("owner", on);
+  if(on) Stars.start(); else Stars.stop();
+  const tg = document.getElementById("themetoggle");
+  if(tg) tg.textContent = on ? "🎨 Normale Ansicht" : "👑 Owner-Ansicht";
+}
+
 let learners = [], config = {};
 let openId = null, search = "";
 let refreshTimer = null, tickTimer = null, nextRefreshAt = 0, serverNow = 0, devices = 1, lastLoad = Date.now();
 
 /* ---------- Start ---------- */
+applyView();
 (async function init(){
   if(!getToken()){ renderLogin(); return; }
   try{ await api("check"); startDashboard(); }
@@ -251,6 +362,7 @@ async function startDashboard(){
         <label class="toggle"><input type="checkbox" id="livemode"> Live (alle 30 Sek.)</label>
         <span class="muted" id="countdown"></span>
         <button class="btn secondary" id="reload">Jetzt aktualisieren</button>
+        <button class="btn secondary" id="themetoggle"></button>
         <a class="btn" href="/">← Zur Lernseite</a>
       </div>
     </div>
@@ -379,6 +491,8 @@ function flash(id, text, ok){
 
 function bindDashboard(){
   document.getElementById("reload").onclick = () => load();
+  document.getElementById("themetoggle").onclick = () => { setOwnerViewPref(!ownerViewPref()); applyView(); };
+  applyView();
 
   // Formatierung
   const ta = document.getElementById("bctext");

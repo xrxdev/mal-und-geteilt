@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
-<script>try{if(localStorage.getItem("mg_admin_token"))document.documentElement.classList.add("owner")}catch(e){}</script>
+<script>try{if(localStorage.getItem("mg_admin_token")&&localStorage.getItem("mg_owner_theme")!=="off")document.documentElement.classList.add("owner")}catch(e){}</script>
 <style>
 :root{
   --paper:#FAFCFF; --paper-2:#F1F5FC; --grid:#DCE7F6; --grid-major:#C3D4EE; --rand:#E9A3A3;
@@ -352,6 +352,7 @@ html.owner .steps>li::before{background:#1A1230;box-shadow:0 0 12px rgba(245,200
     <nav aria-label="Bereiche">
       <button class="navbtn" data-go="learn">Lernen</button>
       <button class="navbtn" data-go="practice">Üben</button>
+      <button class="navbtn" id="themetoggle" hidden title="Zwischen Owner-Ansicht und normaler Ansicht wechseln"></button>
       <a class="navbtn" id="adminlink" href="/admin.html" hidden>Admin</a>
     </nav>
   </header>
@@ -1237,6 +1238,11 @@ html.owner .steps>li::before{background:#1A1230;box-shadow:0 0 12px rgba(245,200
   if(adminToken()){
     adminApi("check").then(() => { showAdminLink(true); applyOwnerTheme(true); }).catch(e => { if(e.status === 401){ setAdminToken(""); applyOwnerTheme(false); if(view === "home" && S.name) renderHome(); } });
   }
+  document.getElementById("themetoggle").addEventListener("click", () => {
+    setOwnerViewPref(!ownerViewPref());
+    applyOwnerTheme(!!adminToken());
+    if(S.name) render();
+  });
   let brandTaps = [];
   document.querySelector(".brand").addEventListener("click", () => {
     const now = Date.now();
@@ -1283,35 +1289,36 @@ html.owner .steps>li::before{background:#1A1230;box-shadow:0 0 12px rgba(245,200
   }
 
   /* ================= OWNER-MODUS ================= */
-  function applyOwnerTheme(on){
-    document.documentElement.classList.toggle("owner", !!on);
+  // isOwner: Browser ist als Owner angemeldet. Die Owner-Ansicht ist zusätzlich abschaltbar.
+  function applyOwnerTheme(isOwner){
+    const on = !!isOwner && ownerViewPref();
+    document.documentElement.classList.toggle("owner", on);
     const badge = document.getElementById("ownerbadge"); if(badge) badge.hidden = !on;
-    if(on) startStars(); else stopStars();
+    const tg = document.getElementById("themetoggle");
+    if(tg){ tg.hidden = !isOwner; tg.textContent = on ? "🎨 Normale Ansicht" : "👑 Owner-Ansicht"; tg.setAttribute("aria-pressed", String(on)); }
+    if(on) Stars.start(); else Stars.stop();
   }
-  let starsRaf = 0, starsRun = false;
-  function startStars(){
-    const cv = document.getElementById("stars"); if(!cv || starsRun) return;
-    starsRun = true;
-    const ctx = cv.getContext("2d");
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let W = 0, H = 0, stars = [], shoot = null;
-    const resize = () => {
+  /* ---------- Sternenhimmel (nur Owner-Ansicht) ---------- */
+  const Stars = (() => {
+    let cv, ctx, W = 0, H = 0, list = [], shoot = null, raf = 0, running = false, inited = false;
+    const reduce = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function resize(){
       const dpr = Math.min(2, window.devicePixelRatio || 1);
       W = cv.clientWidth; H = cv.clientHeight;
       cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
       const n = Math.round(W * H / 9000);
-      stars = Array.from({length:n}, () => ({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.3+.3, p:Math.random()*Math.PI*2, s:.4+Math.random()*1.2, gold:Math.random() < .18}));
-    };
-    resize(); window.addEventListener("resize", resize);
-    const draw = t => {
+      list = Array.from({length:n}, () => ({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.3+.3, p:Math.random()*Math.PI*2, s:.4+Math.random()*1.2, gold:Math.random() < .18}));
+      if(running && reduce()) draw(0);
+    }
+    function draw(t){
       ctx.clearRect(0,0,W,H);
-      for(const st of stars){
-        const a = reduce ? .7 : .35 + .65 * (0.5 + 0.5*Math.sin(st.p + t/1000*st.s));
-        ctx.globalAlpha = a;
+      const still = reduce();
+      for(const st of list){
+        ctx.globalAlpha = still ? .7 : .35 + .65 * (0.5 + 0.5*Math.sin(st.p + t/1000*st.s));
         ctx.fillStyle = st.gold ? "#F5C84C" : "#E8E2FF";
         ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, Math.PI*2); ctx.fill();
       }
-      if(!reduce){
+      if(!still){
         if(!shoot && Math.random() < .004) shoot = {x:Math.random()*W*.8, y:Math.random()*H*.4, vx:6+Math.random()*4, vy:2+Math.random()*2, life:1};
         if(shoot){
           ctx.globalAlpha = shoot.life;
@@ -1323,16 +1330,27 @@ html.owner .steps>li::before{background:#1A1230;box-shadow:0 0 12px rgba(245,200
         }
       }
       ctx.globalAlpha = 1;
-      if(!reduce && starsRun) starsRaf = requestAnimationFrame(draw);
-    };
-    starsRaf = requestAnimationFrame(draw);
-    document.addEventListener("visibilitychange", () => {
-      if(!starsRun || reduce) return;
-      cancelAnimationFrame(starsRaf);
-      if(document.visibilityState === "visible") starsRaf = requestAnimationFrame(draw);
-    });
-  }
-  function stopStars(){ starsRun = false; cancelAnimationFrame(starsRaf); }
+      if(running && !still && document.visibilityState === "visible") raf = requestAnimationFrame(draw);
+    }
+    function start(){
+      cv = cv || document.getElementById("stars"); if(!cv) return;
+      if(!inited){
+        try{ ctx = cv.getContext("2d"); }catch(e){ ctx = null; }
+        if(!ctx) return;   // ohne Canvas einfach keine Sterne
+        inited = true;
+        window.addEventListener("resize", () => { if(running) resize(); });
+        document.addEventListener("visibilitychange", () => { if(running && document.visibilityState === "visible" && !reduce()){ cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); } });
+      }
+      if(running) return;
+      running = true; resize(); cancelAnimationFrame(raf); raf = requestAnimationFrame(draw);
+    }
+    function stop(){ running = false; cancelAnimationFrame(raf); if(ctx) ctx.clearRect(0,0,W,H); }
+    return { start, stop };
+  })();
+  // Owner kann zwischen Owner-Ansicht und normaler Ansicht umschalten (nur in diesem Browser)
+  const ownerViewPref = () => { try{ return localStorage.getItem("mg_owner_theme") !== "off"; }catch(e){ return true; } };
+  function setOwnerViewPref(on){ try{ on ? localStorage.removeItem("mg_owner_theme") : localStorage.setItem("mg_owner_theme", "off"); }catch(e){} }
+
 
   const OWNER_ONLINE_MS = 11 * 60 * 1000;
   async function renderOwnerHome(){
@@ -1462,7 +1480,7 @@ html.owner .steps>li::before{background:#1A1230;box-shadow:0 0 12px rgba(245,200
     app.querySelectorAll("[data-practice]").forEach(b => b.onclick = () => { settings.topic = b.dataset.practice; store.set("settings", settings); go("practice"); });
   }
   function renderHome(){
-    if(adminToken()){ renderOwnerHome(); return; }
+    if(adminToken() && ownerViewPref()){ renderOwnerHome(); return; }
     track({detail: "Startseite"});
     const tot = stats.total + stats.wrong;
     const quote = tot ? Math.round(stats.total / tot * 100) + " %" : "–";
